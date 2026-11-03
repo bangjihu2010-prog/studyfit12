@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#172554">
-<title>StudyFit 모바일 - AI 시험 플래너</title>
+<title>StudyFit 모바일 - AI 자동 반영 플래너</title>
 <style>
 :root{--bg:#f4f6fb;--card:#fff;--ink:#172033;--muted:#687386;--line:#e5e9f1;--blue:#2563eb;--green:#16a34a;--purple:#7c3aed}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
@@ -36,16 +36,12 @@ textarea{width:100%;min-height:68px;padding:10px;border:1px solid #d8deea;border
 .progress{height:9px;background:#e9edf5;border-radius:9px;overflow:hidden;margin:7px 0 13px}.progress i{display:block;height:100%;background:var(--blue);width:0%}
 .notice{background:#eff6ff;color:#1e40af;padding:11px;border-radius:12px;font-size:12px;line-height:1.5}
 .ai-output{white-space:pre-wrap;line-height:1.65;margin-top:12px;padding:13px;background:#f8fafc;border:1px solid var(--line);border-radius:12px;min-height:54px;font-size:14px}
-.ai-status{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted);margin:5px 0 10px}
-.ai-dot{width:8px;height:8px;border-radius:50%;background:#94a3b8;display:inline-block}
-.ai-dot.ok{background:#16a34a}.ai-dot.bad{background:#dc2626}
-.ai-note{background:#fefce8;color:#854d0e;padding:10px;border-radius:10px;font-size:12px;line-height:1.55}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
 @media(min-width:600px){main{padding-top:20px}.event{grid-template-columns:120px 1fr auto}.card{padding:19px}}
 </style>
 </head>
 <body>
-<header><h1>StudyFit</h1><p>공부와 운동 습관 & AI 시험 범위 맞춤 플래너</p></header>
+<header><h1>StudyFit</h1><p>공부와 운동 습관 & AI 데이터 자동 연동 플래너</p></header>
 <main>
 <nav class="tabs">
 <button class="tab active" data-tab="today">오늘</button>
@@ -64,7 +60,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
   </div>
  </div>
  <div class="card"><h2>오늘의 일정</h2><div id="todayEvents"></div></div>
- <div class="notice">일정 옆 체크를 누르면 완료 기록이 저장돼. 시간표는 설정을 바꾸고 다시 생성할 수 있어.</div>
+ <div class="notice">일정 옆 체크를 누르면 완료 기록이 저장돼.</div>
 </section>
 
 <section id="week" class="panel">
@@ -73,62 +69,33 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
 
 <section id="settings" class="panel">
  <div class="card">
-  <h2>개인 일정 설정</h2><p class="sub">시간은 실제 생활에 맞게 수정해. 저장하면 시간표를 다시 계산해.</p>
+  <h2>개인 일정 설정</h2>
   <div id="timeSettings"></div>
   <label>토요일 기상 시간</label><input type="time" id="satWake" value="09:00">
   <label>일요일 기상 시간</label><input type="time" id="sunWake" value="09:00">
   <label>취침 목표</label><input type="time" id="sleepTime" value="00:30">
-  <label>공부 과목 (쉼표로 구분)</label><textarea id="subjects">수학, 영어, 국어, 한국사, 통합사회, 통합과학</textarea>
-  <label>추가 고정 일정 메모</label><input type="text" id="extraNote" placeholder="예: 토요일 14~16시 일정">
   <button class="btn" id="saveSettings">설정 저장 및 시간표 다시 생성</button>
  </div>
 </section>
 
 <section id="stats" class="panel">
  <div class="card"><h2>주간 실천 현황</h2><div id="statsContent"></div></div>
- <div class="card"><button class="btn secondary" id="resetChecks">이번 주 완료 표시 초기화</button><p class="sub">초기화하면 완료 체크만 지워지고 일정 설정은 유지돼.</p></div>
+ <div class="card"><button class="btn secondary" id="resetChecks">이번 주 완료 표시 초기화</button></div>
 </section>
 
 <section id="ai" class="panel">
- <!-- 1. 무료 AI Key 설정 카드 -->
- <div class="card">
-  <h2>무료 AI 키 설정 (Google Gemini)</h2>
-  <p class="sub">구글 Gemini의 무료 API 키를 등록하면 완벽하게 작동해!</p>
-  <label>Gemini API Key</label>
-  <input type="password" id="geminiApiKey" placeholder="AIzaSy... (API 키 입력)">
-  <div class="ai-status"><span class="ai-dot" id="aiDot"></span><span id="aiStatus">API 키를 설정하면 바로 분석할 수 있어.</span></div>
-  <button class="btn secondary" id="saveApiKey">API 키 저장하기</button>
-  <p class="sub" style="margin-top:8px;">💡 키가 없다면 구글에서 <b>Google AI Studio</b>에 들어가 몇 초 만에 무료로 발급받을 수 있어.</p>
- </div>
-
- <!-- 2. 시험 범위 맞춤 AI 플래너 카드 (신규 추가!) -->
+ <!-- 🤖 AI 데이터 자동 반영 카드 -->
  <div class="card" style="border: 2px solid var(--purple);">
-  <h2>📚 AI 시험 범위 맞춤 계획 생성기</h2>
-  <p class="sub">시험 범위와 남은 기간을 입력하면 AI가 학습 우선순위와 주간 계획표를 짜줘!</p>
+  <h2>🤖 AI 시험 계획 데이터 자동 반영</h2>
+  <p class="sub">대화창에서 AI가 만들어준 JSON 데이터를 아래에 붙여넣고 버튼을 누르면 시간표가 즉시 업데이트됩니다!</p>
   
-  <div class="row">
-   <div>
-    <label>시험 D-Day / 시험 시작일</label>
-    <input type="date" id="examDate">
-   </div>
-   <div>
-    <label>하루 목표 공부시간 (시간)</label>
-    <input type="number" id="dailyGoalHours" value="3" min="1" max="15">
-   </div>
-  </div>
-
-  <label>과목별 시험 범위 및 나의 수준 입력</label>
-  <textarea id="examScope" rows="5" placeholder="예:
-- 수학: 다항식의 연산 ~ 이차방정식 (개념 이해 부족함)
-- 영어: 교과서 1~3과, 2024년 3월 모의고사 지문 10개 (단어 암기 필요)
-- 국어: 현대시 5편 분석 및 문제 풀이
-- 한국사: 삼국 시대 통일 과정"></textarea>
-
-  <button class="btn" id="aiGenerateExamPlan" style="background: var(--purple);">✨ 시험범위 분석 & 계획표 짜기</button>
-  <div class="ai-output" id="examPlanReport" aria-live="polite">시험 범위와 시험일을 입력한 후 버튼을 누르면 AI 맞춤 로드맵이 생성됩니다.</div>
+  <label>AI 플랜 데이터 붙여넣기 (JSON 형식)</label>
+  <textarea id="aiJsonInput" rows="6" placeholder='여기에 대화창에서 받은 코드를 붙여넣으세요...'></textarea>
+  
+  <button class="btn" id="applyAiDataBtn" style="background: var(--purple);">✨ 시간표에 즉시 반영하기</button>
+  <div class="ai-output" id="aiApplyStatus" aria-live="polite">대기 중... 데이터를 넣고 버튼을 누르세요.</div>
  </div>
 
- <!-- 3. 이번 주 기록 분석 -->
  <div class="card">
   <h2>이번 주 기록 분석</h2>
   <div class="stats">
@@ -137,16 +104,6 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
    <div class="stat"><span class="sub">공부 실천율</span><b id="aiStudyRate">0%</b></div>
    <div class="stat"><span class="sub">운동 완료일</span><b id="aiWorkoutDays">0일</b></div>
   </div>
-  <button class="btn" id="aiAnalyze">AI 주간 피드백 받기</button>
-  <div class="ai-output" id="aiReport" aria-live="polite">분석 버튼을 누르면 잘한 점과 다음 주 개선 방법을 보여줘.</div>
- </div>
-
- <!-- 4. AI 학습·운동 상담 -->
- <div class="card">
-  <h2>AI 학습·운동 자유 상담</h2>
-  <textarea id="aiQuestion" rows="3" maxlength="1000" placeholder="예: 수학 공부가 자꾸 밀리는데 일정을 어떻게 조정하면 좋을까?"></textarea>
-  <button class="btn" id="aiAsk">질문 보내기</button>
-  <div class="ai-output" id="aiAnswer" aria-live="polite">질문을 입력하면 현재 주간 기록을 참고해 답변해.</div>
  </div>
 </section>
 
@@ -158,7 +115,7 @@ const DAYS=["월요일","화요일","수요일","목요일","금요일","토요�
 const DEFAULT={
  returns:{"월요일":"22:00","화요일":"17:00","수요일":"22:00","목요일":"20:30","금요일":"19:30","토요일":"09:00","일요일":"09:00"},
  wakes:{"토요일":"09:00","일요일":"09:00"},sleep:"00:30",
- subjects:["수학","영어","국어","한국사","통합사회","통합과학"],note:"",apiKey:"",doneMap:{}
+ subjects:["수학","영어","국어","한국사","통합사회","통합과학"],note:"",customPlans:null,doneMap:{}
 };
 let data=load(),plans={},selectedDay=dayFromDate(new Date());
 
@@ -170,6 +127,11 @@ function clock(n){n=(n+1440)%1440;return String(Math.floor(n/60)).padStart(2,"0"
 function ev(a,s,e,title,cat){if(e>s)a.push({s,e,title,cat,done:false,id:Math.random().toString(36).slice(2)})}
 
 function makeDay(day){
+ // 만약 사용자가 AI 커스텀 플랜을 넣었다면 그것우선 적용
+ if(data.customPlans && data.customPlans[day]){
+  let a = data.customPlans[day].map(e=>({...e, done:!!(data.doneMap||{})[[day,e.s,e.e,e.cat,e.title].join("|")]}));
+  return a;
+ }
  let a=[],r=mins(data.returns[day]||"17:00");
  if(day==="월요일"||day==="수요일"){
   ev(a,r,r+30,"귀가 및 휴식","rest");ev(a,r+30,r+50,day==="월요일"?"수학 가벼운 복습":"영어 가벼운 복습","study");ev(a,r+50,Math.min(1440,mins(data.sleep)),"자유 시간 및 취침 준비","rest");
@@ -202,152 +164,40 @@ function renderEvents(container,day){
   let div=document.createElement("div");div.className="event "+e.cat+(e.done?" done":"");
   let time=document.createElement("time");time.textContent=fmt(e.s)+"–"+fmt(e.e);
   let body=document.createElement("div");let strong=document.createElement("strong");strong.textContent=e.title;let small=document.createElement("small");small.textContent=({study:"공부",workout:"운동",rest:"휴식",meal:"식사",fixed:"고정 일정"}[e.cat]||"일정");body.append(strong,small);
-  let check=document.createElement("input");check.type="checkbox";check.className="check";check.checked=e.done;check.setAttribute("aria-label",e.title+" 완료");check.addEventListener("change",()=>{e.done=check.checked;data.doneMap=data.doneMap||{};data.doneMap[e.key]=check.checked;save();renderAll()});
+  let check=document.createElement("input");check.type="checkbox";check.className="check";check.checked=e.done;check.addEventListener("change",()=>{e.done=check.checked;data.doneMap=data.doneMap||{};data.doneMap[e.key]=check.checked;save();renderAll()});
   div.append(time,body,check);container.append(div);
  });
 }
 
 function renderWeek(){let buttons=document.getElementById("dayButtons");buttons.innerHTML="";DAYS.forEach(d=>{let b=document.createElement("button");b.className="day"+(selectedDay===d?" active":"");b.textContent=d.slice(0,1);b.title=d;b.onclick=()=>{selectedDay=d;renderWeek()};buttons.append(b)});renderEvents(document.getElementById("weekEvents"),selectedDay)}
 function renderToday(){let d=dayFromDate(new Date());document.getElementById("todayDate").textContent=new Date().toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric",weekday:"long"});document.getElementById("todayTitle").textContent=d+" 일정";renderEvents(document.getElementById("todayEvents"),d);let a=plans[d]||[],s=0,w=0;a.forEach(e=>{if(e.done&&e.cat==="study")s+=e.e-e.s;if(e.done&&e.cat==="workout")w+=e.e-e.s});document.getElementById("todayStudy").textContent=s+"분";document.getElementById("todayWorkout").textContent=w+"분"}
-function renderStats(){let study=0,studyDone=0,work=0,workDone=0,workDays=0,lines=[];DAYS.forEach(d=>{let s=0,sd=0,w=0,wd=0;(plans[d]||[]).forEach(e=>{if(e.cat==="study"){s+=e.e-e.s;if(e.done)sd+=e.e-e.s}if(e.cat==="workout"){w+=e.e-e.s;if(e.done)wd+=e.e-e.s}});study+=s;studyDone+=sd;work+=w;workDone+=wd;if(w)workDays++;lines.push(`<p><b>${d}</b> · 공부 ${sd}/${s}분 · 운동 ${wd}/${w}분</p>`)});let pct=study?Math.round(studyDone/study*100):0;document.getElementById("statsContent").innerHTML=`<p>공부 실천 <b>${studyDone}분</b> / 계획 ${study}분 (${pct}%)</p><div class="progress"><i style="width:${pct}%"></i></div><p>운동 실천 <b>${workDone}분</b> / 계획 ${work}분</p><p>운동 배정일 ${workDays}일 / 주간 목표 5회</p><hr>${lines.join("")}`}
-function renderAll(){renderToday();renderWeek();renderStats();if(document.getElementById("aiStudyDone"))updateAIOverview()}
-
-function renderSettings(){
- let box=document.getElementById("timeSettings");box.innerHTML="";
- DAYS.forEach(d=>{let row=document.createElement("div");row.className="settingrow";let span=document.createElement("span");span.textContent=d;let input=document.createElement("input");input.type="time";input.value=data.returns[d];input.dataset.day=d;row.append(span,input);box.append(row)});
- document.getElementById("satWake").value=data.wakes["토요일"];
- document.getElementById("sunWake").value=data.wakes["일요일"];
- document.getElementById("sleepTime").value=data.sleep;
- document.getElementById("subjects").value=data.subjects.join(", ");
- document.getElementById("extraNote").value=data.note||"";
- if(data.apiKey) document.getElementById("geminiApiKey").value=data.apiKey;
-}
+function renderStats(){let study=0,studyDone=0,work=0,workDone=0,workDays=0,lines=[];DAYS.forEach(d=>{let s=0,sd=0,w=0,wd=0;(plans[d]||[]).forEach(e=>{if(e.cat==="study"){s+=e.e-e.s;if(e.done)sd+=e.e-e.s}if(e.cat==="workout"){w+=e.e-e.s;if(e.done)wd+=e.e-e.s}});study+=s;studyDone+=sd;work+=w;workDone+=wd;if(w)workDays++;lines.push(`<p><b>${d}</b> · 공부 ${sd}/${s}분</p>`)});let pct=study?Math.round(studyDone/study*100):0;document.getElementById("statsContent").innerHTML=`<p>공부 실천 <b>${studyDone}분</b> / 계획 ${study}분 (${pct}%)</p><div class="progress"><i style="width:${pct}%"></i></div>`;document.getElementById("aiStudyDone").textContent=studyDone+"분";document.getElementById("aiWorkoutDone").textContent=workDone+"분";document.getElementById("aiStudyRate").textContent=pct+"%";document.getElementById("aiWorkoutDays").textContent=workDays+"일";}
+function renderAll(){renderToday();renderWeek();renderStats();}
+function renderSettings(){let box=document.getElementById("timeSettings");box.innerHTML="";DAYS.forEach(d=>{let row=document.createElement("div");row.className="settingrow";let span=document.createElement("span");span.textContent=d;let input=document.createElement("input");input.type="time";input.value=data.returns[d];input.dataset.day=d;row.append(span,input);box.append(row)});document.getElementById("satWake").value=data.wakes["토요일"];document.getElementById("sunWake").value=data.wakes["일요일"];document.getElementById("sleepTime").value=data.sleep;}
 
 document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tab,.panel").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.getElementById(b.dataset.tab).classList.add("active")}));
-document.getElementById("saveSettings").onclick=()=>{document.querySelectorAll("#timeSettings input").forEach(i=>data.returns[i.dataset.day]=i.value);data.wakes["토요일"]=document.getElementById("satWake").value;data.wakes["일요일"]=document.getElementById("sunWake").value;data.sleep=document.getElementById("sleepTime").value;data.subjects=document.getElementById("subjects").value.split(",").map(x=>x.trim()).filter(Boolean);data.note=document.getElementById("extraNote").value;save();generate();updateAIOverview();alert("설정을 저장했어.")};
-document.getElementById("resetChecks").onclick=()=>{if(confirm("모든 완료 체크를 초기화할까?")){data.doneMap={};DAYS.forEach(d=>plans[d].forEach(e=>e.done=false));save();renderAll()}};
+document.getElementById("saveSettings").onclick=()=>{document.querySelectorAll("#timeSettings input").forEach(i=>data.returns[i.dataset.day]=i.value);data.wakes["토요일"]=document.getElementById("satWake").value;data.wakes["일요일"]=document.getElementById("sunWake").value;data.sleep=document.getElementById("sleepTime").value;save();generate();alert("설정을 저장했어.")};
+document.getElementById("resetChecks").onclick=()=>{if(confirm("모든 완료 체크를 초기화할까?")){data.doneMap={};save();renderAll()}};
 
-// --- 무료 Gemini API 연동 코드 ---
-document.getElementById("saveApiKey").addEventListener("click",()=>{
- data.apiKey=document.getElementById("geminiApiKey").value.trim();
- save();
- updateAIOverview();
- alert("API 키가 안전하게 저장되었습니다.");
-});
-
-function collectAIData(){
- const days=[];let totalStudy=0,doneStudy=0,totalWorkout=0,doneWorkout=0,workoutDays=0;
- DAYS.forEach(day=>{
-  const events=plans[day]||[];let ps=0,ds=0,pw=0,dw=0;const subjects={};
-  events.forEach(e=>{
-   const duration=Math.max(0,e.e-e.s);
-   if(e.cat==="study"){ps+=duration;if(e.done)ds+=duration;subjects[e.title]=(subjects[e.title]||0)+duration;}
-   if(e.cat==="workout"){pw+=duration;if(e.done)dw+=duration;}
-  });
-  totalStudy+=ps;doneStudy+=ds;totalWorkout+=pw;doneWorkout+=dw;if(dw>0)workoutDays++;
-  days.push({day,plannedStudyMinutes:ps,completedStudyMinutes:ds,plannedWorkoutMinutes:pw,completedWorkoutMinutes:dw,studyTasks:subjects});
- });
- return {subjects:data.subjects,bedtimeGoal:data.sleep,days,totals:{plannedStudyMinutes:totalStudy,completedStudyMinutes:doneStudy,plannedWorkoutMinutes:totalWorkout,completedWorkoutMinutes:doneWorkout,workoutDays}};
-}
-
-function updateAIOverview(){
- const s=collectAIData(),t=s.totals;
- document.getElementById("aiStudyDone").textContent=t.completedStudyMinutes+"분";
- document.getElementById("aiWorkoutDone").textContent=t.completedWorkoutMinutes+"분";
- document.getElementById("aiStudyRate").textContent=(t.plannedStudyMinutes?Math.round(t.completedStudyMinutes/t.plannedStudyMinutes*100):0)+"%";
- document.getElementById("aiWorkoutDays").textContent=t.workoutDays+"일";
- const hasKey = !!(data.apiKey || "").trim();
- document.getElementById("aiStatus").textContent = hasKey ? "Gemini API 키가 준비되었습니다." : "API 키를 설정하면 바로 분석할 수 있어.";
- document.getElementById("aiDot").className = "ai-dot" + (hasKey ? " ok" : "");
-}
-
-async function fetchGeminiAPI(promptText) {
- const apiKey = (data.apiKey || "").trim();
- if (!apiKey) throw new Error("먼저 Gemini API 키를 입력하고 저장해주세요.");
- 
- const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`;
- const response = await fetch(url, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-   contents: [{ parts: [{ text: promptText }] }]
-  })
- });
-
- const json = await response.json();
- if (!response.ok) throw new Error(json.error?.message || "API 요청 오류 발생");
- return json.candidates[0].content.parts[0].text;
-}
-
-// 1) 주간 기록 피드백 분석
-document.getElementById("aiAnalyze").addEventListener("click", async () => {
- const out = document.getElementById("aiReport"), btn = document.getElementById("aiAnalyze");
- btn.disabled = true; out.textContent = "AI가 지난 학습 기록을 분석 중입니다...";
+// 🤖 AI 데이터 자동 반영 이벤트 리스너
+document.getElementById("applyAiDataBtn").addEventListener("click", () => {
+ const rawText = document.getElementById("aiJsonInput").value.trim();
+ const statusBox = document.getElementById("aiApplyStatus");
+ if(!rawText) return alert("붙여넣을 JSON 데이터가 없습니다!");
  try {
-  const summaryData = JSON.stringify(collectAIData(), null, 2);
-  const prompt = `너는 학습 습관 코치야. 다음은 학생의 주간 공부/운동 실천 데이터야:\n${summaryData}\n이 실천율과 공부 시간을 바탕으로 칭찬할 점, 부족했던 과목, 개선 아이디어 3가지를 따뜻하고 명확하게 한국어로 작성해줘.`;
-  out.textContent = await fetchGeminiAPI(prompt);
+  const parsed = JSON.parse(rawText);
+  data.customPlans = parsed; // 커스텀 플랜 저장
+  save();
+  generate();
+  statusBox.textContent = "✅ 성공적으로 AI 계획표가 시간표에 반영되었습니다! '주간 시간표' 탭에서 확인해보세요.";
+  statusBox.style.color = "var(--green)";
  } catch(e) {
-  out.textContent = "오류: " + e.message;
- } finally { btn.disabled = false; }
-});
-
-// 2) AI 자유 질문
-document.getElementById("aiAsk").addEventListener("click", async () => {
- const q = document.getElementById("aiQuestion").value.trim();
- const out = document.getElementById("aiAnswer"), btn = document.getElementById("aiAsk");
- if (!q) return alert("질문을 입력해주세요.");
- btn.disabled = true; out.textContent = "답변 생성 중...";
- try {
-  const summaryData = JSON.stringify(collectAIData());
-  const prompt = `학생 질문: "${q}"\n참고 학생 상황: ${summaryData}\n위 학생의 질문에 솔직하고 현실적인 학습/운동 팁을 구체적으로 답변해줘.`;
-  out.textContent = await fetchGeminiAPI(prompt);
- } catch(e) {
-  out.textContent = "오류: " + e.message;
- } finally { btn.disabled = false; }
-});
-
-// 3) 시험 범위 기반 학습 계획 생성 (Core Feature)
-document.getElementById("aiGenerateExamPlan").addEventListener("click", async () => {
- const scope = document.getElementById("examScope").value.trim();
- const examDate = document.getElementById("examDate").value;
- const hours = document.getElementById("dailyGoalHours").value;
- const out = document.getElementById("examPlanReport");
- const btn = document.getElementById("aiGenerateExamPlan");
-
- if (!scope) return alert("시험 범위를 입력해주세요!");
- if (!examDate) return alert("시험 날짜를 선택해주세요!");
-
- btn.disabled = true;
- out.textContent = "AI가 시험 범위와 남은 기간을 계산하여 맞춤형 플랜을 만드는 중입니다...";
-
- try {
-  const today = new Date().toISOString().split('T')[0];
-  const prompt = `
- 너는 수험생 전문 시험 플래너 AI야.
- 오늘 날짜: ${today}
- 시험 시작 날짜: ${examDate}
- 하루목표 공부시간: ${hours}시간
-
- [학생이 제출한 시험 범위 및 과목별 난이도/상태]
- ${scope}
-
- 위 정보를 바탕으로 학생을 위한 [시험 대비 맞춤 3단계 학습 계획]을 작성해줘.
- 1. 남은 D-Day 계산 및 전략 요약 (개념 정리 / 기출 풀이 / 직전 복습 주차 할당)
- 2. 과목별 주간 추천 공부 시간 및 집중할 포인트
- 3. 하루 ${hours}시간을 효율적으로 분배한 요일별/타임라인 예시 플랜
- 4. 시험 당일까지 유지해야 할 멘탈 및 실천 수칙
- 읽기 쉽고 깔끔한 줄바꿈과 이모티콘을 섞어서 용기를 주는 톤으로 작성해줘.
- `;
-  out.textContent = await fetchGeminiAPI(prompt);
- } catch(e) {
-  out.textContent = "오류: " + e.message;
- } finally {
-  btn.disabled = false;
+  statusBox.textContent = "❌ 오류 발생: 올바른 JSON 형식인지 확인해주세요. (" + e.message + ")";
+  statusBox.style.color = "var(--danger)";
  }
 });
 
-renderSettings();generate();updateAIOverview();
+renderSettings();generate();
 </script>
 </body>
 </html>
