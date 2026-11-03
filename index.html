@@ -4,22 +4,71 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#172554">
-<title>StudyFit 모바일 - AI 자동 반영 플래너</title>
+<title>StudyFit - 스마트 올인원 AI 학습 플래너</title>
 <style>
-:root{--bg:#f4f6fb;--card:#fff;--ink:#172033;--muted:#687386;--line:#e5e9f1;--blue:#2563eb;--green:#16a34a;--purple:#7c3aed}
+:root{--bg:#f4f6fb;--card:#fff;--ink:#172033;--muted:#687386;--line:#e5e9f1;--blue:#2563eb;--green:#16a34a;--orange:#f97316;--purple:#7c3aed;--gold:#eab308;--red:#ef4444;--cyan:#06b6d4}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
-header{background:#172554;color:#fff;padding:22px 18px 18px;padding-top:calc(18px + env(safe-area-inset-top))}
-header h1{margin:0;font-size:24px}header p{margin:5px 0 0;color:#c7d2fe;font-size:13px}
+header{background:#172554;color:#fff;padding:22px 18px 18px;padding-top:calc(18px + env(safe-area-inset-top));display:flex;justify-content:space-between;align-items:center}
+header h1{margin:0;font-size:24px}header p{margin:3px 0 0;color:#c7d2fe;font-size:12px}
+.header-badges{display:flex;gap:6px;align-items:center}
+.header-streak{background:rgba(255,255,255,0.15);padding:6px 12px;border-radius:20px;display:flex;align-items:center;gap:4px;font-weight:800;color:#ffedd5;font-size:13px}
+.header-dday{background:var(--purple);padding:6px 12px;border-radius:20px;font-weight:800;color:#fff;font-size:13px}
+
 main{max-width:760px;margin:auto;padding:14px 13px 100px}
-.tabs{display:flex;gap:7px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5}
-.tab{flex:1;border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 4px;font-weight:700;color:var(--muted);cursor:pointer}
+.tabs{display:flex;gap:5px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5;overflow-x:auto}
+.tab{flex:1;min-width:64px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 2px;font-weight:700;font-size:13px;color:var(--muted);cursor:pointer;text-align:center;white-space:nowrap}
 .tab.active{background:#172554;color:#fff;border-color:#172554}
 .panel{display:none}.panel.active{display:block}
 .card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;margin:10px 0;box-shadow:0 2px 8px #17255408}
 h2{font-size:18px;margin:0 0 12px}.sub{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* 스트릭 & 듀오링고 요소 */
+.streak-card{background:linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);border:2px solid #fed7aa;position:relative;overflow:hidden}
+.streak-banner{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.fire-box{display:flex;align-items:center;gap:12px}
+.fire-icon{font-size:38px;animation:flame 1.5s infinite alternate}
+@keyframes flame { 0%{transform:scale(1);} 100%{transform:scale(1.12);} }
+.streak-info h3{margin:0;font-size:19px;color:#9a3412}
+.streak-info p{margin:2px 0 0;font-size:12px;color:#c2410c;font-weight:600}
+.freeze-badge{background:#e0f2fe;border:1px solid #7dd3fc;color:#0369a1;padding:6px 10px;border-radius:12px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:4px}
+
+/* 타이머 카운터 */
+.timer-card{background:#1e293b;color:#fff;text-align:center;border-color:#334155}
+.timer-card h2{color:#f8fafc}
+.timer-display{font-size:48px;font-weight:900;font-family:monospace;margin:12px 0;color:#38bdf8;letter-spacing:2px}
+.timer-controls{display:flex;gap:8px;justify-content:center}
+.timer-controls .btn{flex:1;margin-top:0}
+.timer-preset{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
+.timer-preset button{background:#334155;color:#f1f5f9;border:0;padding:6px 10px;border-radius:8px;font-size:12px;cursor:pointer}
+.timer-preset button.active{background:var(--blue);color:#fff;font-weight:700}
+
+/* ASMR 백색소음 바 */
+.asmr-box{background:#0f172a;border-radius:12px;padding:12px;margin-top:14px;border:1px solid #334155}
+.asmr-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.asmr-btn{background:#1e293b;color:#cbd5e1;border:1px solid #475569;border-radius:8px;padding:8px 4px;font-size:12px;cursor:pointer}
+.asmr-btn.active{background:var(--cyan);color:#fff;font-weight:700;border-color:var(--cyan)}
+
+/* 과목별 통계 비주얼 차트 */
+.chart-bar-wrap{margin:10px 0}
+.chart-row{display:grid;grid-template-columns:80px 1fr 45px;gap:8px;align-items:center;margin:7px 0;font-size:12px}
+.chart-bg{height:14px;background:#e2e8f0;border-radius:10px;overflow:hidden}
+.chart-fill{height:100%;background:var(--blue);border-radius:10px;width:0%;transition:width 0.5s}
+
+/* 뱃지 그리드 */
+.badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.badge-item{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 4px;text-align:center;opacity:0.35;transition:all 0.3s}
+.badge-item.unlocked{opacity:1;border-color:var(--gold);box-shadow:0 2px 8px rgba(234,179,8,0.25)}
+.badge-icon{font-size:22px;display:block;margin-bottom:2px}
+.badge-name{font-size:10px;font-weight:700;color:var(--ink)}
+
+/* 오답 노트 메모 리스트 */
+.note-item{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;background:#fff;display:flex;justify-content:space-between;align-items:center}
+.note-item strong{font-size:14px;display:block;margin-bottom:2px}
+.note-item p{margin:0;font-size:12px;color:var(--muted)}
+
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .stat{background:#f8fafc;border-radius:13px;padding:12px}.stat b{display:block;font-size:23px;margin-top:5px}.blue{color:var(--blue)}.green{color:var(--green)}
-select,input,button,textarea{font:inherit}select,input[type=time],input[type=text],input[type=password],input[type=number],input[type=date]{width:100%;padding:11px;border:1px solid #d8deea;border-radius:10px;background:#fff;color:var(--ink);min-height:42px}
+select,input,button,textarea{font:inherit}select,input[type=time],input[type=text],input[type=number],input[type=date]{width:100%;padding:11px;border:1px solid #d8deea;border-radius:10px;background:#fff;color:var(--ink);min-height:42px}
 label{display:block;font-size:13px;font-weight:650;margin:11px 0 5px}
 .days{display:flex;gap:6px;overflow:auto;padding:2px 0 10px}.day{flex:0 0 auto;border:1px solid var(--line);border-radius:10px;background:#fff;padding:9px 12px;color:var(--muted);font-weight:700;cursor:pointer}.day.active{background:#dbeafe;border-color:#93c5fd;color:#1d4ed8}
 .event{display:grid;grid-template-columns:92px 1fr auto;gap:9px;align-items:center;border:1px solid var(--line);border-left:5px solid #94a3b8;border-radius:12px;padding:11px;margin:8px 0;background:#fff}
@@ -28,30 +77,48 @@ label{display:block;font-size:13px;font-weight:650;margin:11px 0 5px}
 .event.done{opacity:.55}.event.done strong{text-decoration:line-through}
 .check{width:23px;height:23px;accent-color:var(--green);cursor:pointer}
 .btn{border:0;border-radius:11px;padding:12px 14px;font-weight:750;background:#172554;color:#fff;width:100%;margin-top:10px;cursor:pointer}
-.btn:disabled{opacity:0.6;cursor:not-allowed}
 .btn.secondary{background:#e8eefc;color:#1e3a8a}.btn.danger{background:#fee2e2;color:#991b1b}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .settingrow{display:grid;grid-template-columns:82px 1fr;gap:10px;align-items:center;margin:9px 0}.settingrow span{font-size:13px;font-weight:700}
 textarea{width:100%;min-height:68px;padding:10px;border:1px solid #d8deea;border-radius:10px;font:inherit}
 .progress{height:9px;background:#e9edf5;border-radius:9px;overflow:hidden;margin:7px 0 13px}.progress i{display:block;height:100%;background:var(--blue);width:0%}
-.notice{background:#eff6ff;color:#1e40af;padding:11px;border-radius:12px;font-size:12px;line-height:1.5}
 .ai-output{white-space:pre-wrap;line-height:1.65;margin-top:12px;padding:13px;background:#f8fafc;border:1px solid var(--line);border-radius:12px;min-height:54px;font-size:14px}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
 @media(min-width:600px){main{padding-top:20px}.event{grid-template-columns:120px 1fr auto}.card{padding:19px}}
 </style>
 </head>
 <body>
-<header><h1>StudyFit</h1><p>공부와 운동 습관 & AI 데이터 자동 연동 플래너</p></header>
+<header>
+ <div><h1>StudyFit</h1><p>스마트 AI 학습 생태계</p></div>
+ <div class="header-badges">
+  <div class="header-dday" id="headerDdayVal">D-Day 설정</div>
+  <div class="header-streak"><span>🔥</span><span id="headerStreakVal">0일</span></div>
+ </div>
+</header>
 <main>
 <nav class="tabs">
 <button class="tab active" data-tab="today">오늘</button>
+<button class="tab" data-tab="timer">⏱️ 타이머</button>
+<button class="tab" data-tab="notes">📝 오답노트</button>
+<button class="tab" data-tab="stats">📊 통계/배지</button>
 <button class="tab" data-tab="week">주간 시간표</button>
-<button class="tab" data-tab="settings">일정 설정</button>
-<button class="tab" data-tab="stats">기록</button>
-<button class="tab" data-tab="ai">AI 코치</button>
+<button class="tab" data-tab="settings">설정</button>
+<button class="tab" data-tab="ai">AI 연동</button>
 </nav>
 
 <section id="today" class="panel active">
+ <div class="card streak-card">
+  <div class="streak-banner">
+   <div class="fire-box">
+    <div class="fire-icon">🔥</div>
+    <div class="streak-info">
+     <h3 id="streakTitle">0일 연속 달성 중!</h3>
+     <p id="streakSub">오늘 일정을 완료하고 스트릭을 유지하세요!</p>
+    </div>
+   </div>
+   <div class="freeze-badge">❄️ 프리즈 <span id="freezeCount">1</span>개</div>
+  </div>
+ </div>
+
  <div class="card">
   <div class="sub" id="todayDate"></div><h2 id="todayTitle">오늘의 계획</h2>
   <div class="stats">
@@ -60,7 +127,79 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
   </div>
  </div>
  <div class="card"><h2>오늘의 일정</h2><div id="todayEvents"></div></div>
- <div class="notice">일정 옆 체크를 누르면 완료 기록이 저장돼.</div>
+</section>
+
+<!-- ⏱️ 학습 스톱워치 / 뽀모도로 / ASMR 백색소음 -->
+<section id="timer" class="panel">
+ <div class="card timer-card">
+  <h2>⏱️ 실시간 학습 타이머</h2>
+  <p class="sub" style="color:#94a3b8">측정할 일정을 선택하고 집중 공부를 시작하세요.</p>
+  
+  <label style="color:#cbd5e1;text-align:left">학습/운동 일정 선택</label>
+  <select id="timerTaskSelect" style="background:#0f172a;color:#fff;border-color:#334155;margin-bottom:12px"></select>
+
+  <div class="timer-preset">
+   <button class="active" id="modeStopwatch">스톱워치</button>
+   <button id="modePomo25">뽀모도로 (25분)</button>
+   <button id="modePomo50">뽀모도로 (50분)</button>
+  </div>
+
+  <div class="timer-display" id="timerDisplay">00:00:00</div>
+
+  <div class="timer-controls">
+   <button class="btn" id="startTimerBtn" style="background:var(--green)">▶ 시작</button>
+   <button class="btn" id="pauseTimerBtn" style="background:var(--gold);color:#000;display:none">⏸️ 일시정지</button>
+   <button class="btn secondary" id="resetTimerBtn">🔄 리셋</button>
+  </div>
+  <button class="btn danger" id="finishTimerBtn" style="margin-top:10px;display:none">⏹️ 완료하고 완료 체크 저장하기</button>
+
+  <!-- 🎵 ASMR 백색소음 플레이어 -->
+  <div class="asmr-box">
+   <div style="font-size:13px;font-weight:700;color:#e2e8f0;text-align:left">🎵 집중 백색소음 (ASMR)</div>
+   <div class="asmr-btns">
+    <button class="asmr-btn" id="asmrOff">끄기</button>
+    <button class="asmr-btn" id="asmrRain">🌧️ 빗소리</button>
+    <button class="asmr-btn" id="asmrNoise">🎧 핑크노이즈</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 📝 과목별 오답 노트 및 핵심 정리 -->
+<section id="notes" class="panel">
+ <div class="card">
+  <h2>📝 과목별 오답 노트 & 메모</h2>
+  <p class="sub">복습이 필요한 문제나 핵심 개념을 바로 작성하세요.</p>
+  <label>과목 선택</label>
+  <input type="text" id="noteSubject" placeholder="예: 수학, 영어">
+  <label>내용 / 틀린 이유 메모</label>
+  <textarea id="noteText" rows="3" placeholder="예: 이차방정식 근의 공식 부호 실수 함정 주의!"></textarea>
+  <button class="btn" id="addNoteBtn">➕ 오답 노트 추가</button>
+ </div>
+ <div class="card">
+  <h2>저장된 메모 목록</h2>
+  <div id="noteList"></div>
+ </div>
+</section>
+
+<!-- 📊 실천 통계 시각화 및 배지 -->
+<section id="stats" class="panel">
+ <div class="card">
+  <h2>🏆 학습 보상 배지</h2>
+  <div class="badge-grid">
+   <div class="badge-item" id="badge1"><span class="badge-icon">🌱</span><span class="badge-name">첫 걸음</span></div>
+   <div class="badge-item" id="badge2"><span class="badge-icon">🔥</span><span class="badge-name">3일 불꽃</span></div>
+   <div class="badge-item" id="badge3"><span class="badge-icon">⚡</span><span class="badge-name">7일 열정</span></div>
+   <div class="badge-item" id="badge4"><span class="badge-icon">👑</span><span class="badge-name">주간 마스터</span></div>
+  </div>
+ </div>
+ <div class="card">
+  <h2>📊 과목별 실천 분석 그래프</h2>
+  <p class="sub">이번 주 어떤 과목을 집중적으로 공부했는지 한눈에 보여줍니다.</p>
+  <div id="subjectChart" class="chart-bar-wrap"></div>
+ </div>
+ <div class="card"><h2>주간 총계 현황</h2><div id="statsContent"></div></div>
+ <div class="card"><button class="btn secondary" id="resetChecks">이번 주 완료 표시 초기화</button></div>
 </section>
 
 <section id="week" class="panel">
@@ -69,7 +208,9 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
 
 <section id="settings" class="panel">
  <div class="card">
-  <h2>개인 일정 설정</h2>
+  <h2>개인 일정 & D-Day 설정</h2>
+  <label>🎯 목표 시험일 (D-Day)</label>
+  <input type="date" id="examDdayInput">
   <div id="timeSettings"></div>
   <label>토요일 기상 시간</label><input type="time" id="satWake" value="09:00">
   <label>일요일 기상 시간</label><input type="time" id="sunWake" value="09:00">
@@ -78,36 +219,18 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
  </div>
 </section>
 
-<section id="stats" class="panel">
- <div class="card"><h2>주간 실천 현황</h2><div id="statsContent"></div></div>
- <div class="card"><button class="btn secondary" id="resetChecks">이번 주 완료 표시 초기화</button></div>
-</section>
-
 <section id="ai" class="panel">
- <!-- 🤖 AI 데이터 자동 반영 카드 -->
  <div class="card" style="border: 2px solid var(--purple);">
   <h2>🤖 AI 시험 계획 데이터 자동 반영</h2>
-  <p class="sub">대화창에서 AI가 만들어준 JSON 데이터를 아래에 붙여넣고 버튼을 누르면 시간표가 즉시 업데이트됩니다!</p>
-  
+  <p class="sub">대화창에서 AI가 만들어준 JSON 데이터를 붙여넣고 반영 버튼을 누르세요!</p>
   <label>AI 플랜 데이터 붙여넣기 (JSON 형식)</label>
   <textarea id="aiJsonInput" rows="6" placeholder='여기에 대화창에서 받은 코드를 붙여넣으세요...'></textarea>
-  
   <button class="btn" id="applyAiDataBtn" style="background: var(--purple);">✨ 시간표에 즉시 반영하기</button>
-  <div class="ai-output" id="aiApplyStatus" aria-live="polite">대기 중... 데이터를 넣고 버튼을 누르세요.</div>
- </div>
-
- <div class="card">
-  <h2>이번 주 기록 분석</h2>
-  <div class="stats">
-   <div class="stat"><span class="sub">공부 완료</span><b class="blue" id="aiStudyDone">0분</b></div>
-   <div class="stat"><span class="sub">운동 완료</span><b class="green" id="aiWorkoutDone">0분</b></div>
-   <div class="stat"><span class="sub">공부 실천율</span><b id="aiStudyRate">0%</b></div>
-   <div class="stat"><span class="sub">운동 완료일</span><b id="aiWorkoutDays">0일</b></div>
-  </div>
+  <div class="ai-output" id="aiApplyStatus" aria-live="polite">대기 중...</div>
  </div>
 </section>
 
-<footer>StudyFit AI · 일정과 완료 기록은 이 브라우저에 저장됩니다.</footer>
+<footer>StudyFit AI · 올인원 플래너</footer>
 </main>
 
 <script>
@@ -115,7 +238,7 @@ const DAYS=["월요일","화요일","수요일","목요일","금요일","토요�
 const DEFAULT={
  returns:{"월요일":"22:00","화요일":"17:00","수요일":"22:00","목요일":"20:30","금요일":"19:30","토요일":"09:00","일요일":"09:00"},
  wakes:{"토요일":"09:00","일요일":"09:00"},sleep:"00:30",
- subjects:["수학","영어","국어","한국사","통합사회","통합과학"],note:"",customPlans:null,doneMap:{}
+ streak:0, freeze:1, lastCompletedDate:"", examDate:"", notes:[], customPlans:null, doneMap:{}
 };
 let data=load(),plans={},selectedDay=dayFromDate(new Date());
 
@@ -127,10 +250,8 @@ function clock(n){n=(n+1440)%1440;return String(Math.floor(n/60)).padStart(2,"0"
 function ev(a,s,e,title,cat){if(e>s)a.push({s,e,title,cat,done:false,id:Math.random().toString(36).slice(2)})}
 
 function makeDay(day){
- // 만약 사용자가 AI 커스텀 플랜을 넣었다면 그것우선 적용
  if(data.customPlans && data.customPlans[day]){
-  let a = data.customPlans[day].map(e=>({...e, done:!!(data.doneMap||{})[[day,e.s,e.e,e.cat,e.title].join("|")]}));
-  return a;
+  return data.customPlans[day].map(e=>({...e, done:!!(data.doneMap||{})[[day,e.s,e.e,e.cat,e.title].join("|")]}));
  }
  let a=[],r=mins(data.returns[day]||"17:00");
  if(day==="월요일"||day==="수요일"){
@@ -154,8 +275,203 @@ function makeDay(day){
  return a
 }
 
-function generate(){plans={};DAYS.forEach(d=>plans[d]=makeDay(d));save();renderAll()}
+function generate(){plans={};DAYS.forEach(d=>plans[d]=makeDay(d));save();renderAll();populateTimerSelect();}
 function fmt(n){return clock(n)}
+
+// 🚩 D-Day 계산기
+function updateDdayUI(){
+ const ddayEl = document.getElementById("headerDdayVal");
+ if(!data.examDate){ ddayEl.textContent = "D-Day 설정"; return; }
+ const today = new Date(); today.setHours(0,0,0,0);
+ const target = new Date(data.examDate); target.setHours(0,0,0,0);
+ const diffDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+ if(diffDays === 0) ddayEl.textContent = "D-DAY!";
+ else if(diffDays > 0) ddayEl.textContent = "D-" + diffDays;
+ else ddayEl.textContent = "D+" + Math.abs(diffDays);
+}
+
+// 🔥 스트릭 & ❄️ 프리즈 로직
+function updateStreakLogic(){
+ const todayStr = new Date().toISOString().split('T')[0];
+ const todayName = dayFromDate(new Date());
+ const todayEvents = plans[todayName] || [];
+ const hasDoneToday = todayEvents.some(e => e.done && (e.cat === 'study' || e.cat === 'workout'));
+
+ if (hasDoneToday) {
+  if (data.lastCompletedDate !== todayStr) {
+   const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+   const yStr = yesterday.toISOString().split('T')[0];
+
+   if (data.lastCompletedDate === yStr) { data.streak += 1; }
+   else if (data.lastCompletedDate && data.lastCompletedDate !== todayStr) {
+    // 날짜가 뚫렸을 때 프리즈 확인
+    if (data.freeze > 0) {
+     data.freeze -= 1; // 프리즈 차감으로 스트릭 보존!
+     data.streak += 1;
+     alert("❄️ 스트릭 프리즈가 적용되어 연속 스트릭이 유지되었습니다!");
+    } else {
+     data.streak = 1;
+    }
+   } else { data.streak = 1; }
+   data.lastCompletedDate = todayStr;
+   save();
+  }
+ }
+ updateStreakUI();
+}
+
+function updateStreakUI(){
+ const s = data.streak || 0;
+ document.getElementById("headerStreakVal").textContent = s + "일";
+ document.getElementById("streakTitle").textContent = s + "일 연속 달성 중!";
+ document.getElementById("streakSub").textContent = s > 0 ? "불꽃이 불타오르고 있어요! 🔥" : "오늘 공부나 운동을 완료하고 스트릭을 만드세요!";
+ document.getElementById("freezeCount").textContent = data.freeze || 0;
+
+ if(s >= 1) document.getElementById("badge1").classList.add("unlocked");
+ if(s >= 3) document.getElementById("badge2").classList.add("unlocked");
+ if(s >= 7) document.getElementById("badge3").classList.add("unlocked");
+}
+
+// ⏱️ 타이머 & 🎵 백색소음 엔진
+let timerInterval = null, timerSeconds = 0, timerMode = "stopwatch", timerTargetSeconds = 0;
+let audioCtx = null, noiseNode = null;
+
+function updateTimerDisplay(){
+ let sec = timerMode === "stopwatch" ? timerSeconds : Math.max(0, timerTargetSeconds - timerSeconds);
+ let h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
+ document.getElementById("timerDisplay").textContent = 
+  (h > 0 ? String(h).padStart(2,'0') + ":" : "") + String(m).padStart(2,'0') + ":" + String(s).padStart(2,'0');
+}
+
+function populateTimerSelect(){
+ const select = document.getElementById("timerTaskSelect"); select.innerHTML = "";
+ const today = dayFromDate(new Date());
+ (plans[today] || []).forEach(e => {
+  if(e.cat === "study" || e.cat === "workout") {
+   let opt = document.createElement("option"); opt.value = e.key;
+   opt.textContent = `[${e.cat === 'study'?'공부':'운동'}] ${e.title} (${fmt(e.s)}~${fmt(e.e)})`;
+   select.appendChild(opt);
+  }
+ });
+ if(!select.children.length){ let opt = document.createElement("option"); opt.textContent = "오늘 예정된 일정이 없습니다"; select.appendChild(opt); }
+}
+
+document.getElementById("modeStopwatch").onclick = function(){ setTimerMode("stopwatch", 0, this); };
+document.getElementById("modePomo25").onclick = function(){ setTimerMode("pomo", 25 * 60, this); };
+document.getElementById("modePomo50").onclick = function(){ setTimerMode("pomo", 50 * 60, this); };
+
+function setTimerMode(mode, targetSec, btn){
+ resetTimer(); timerMode = mode; timerTargetSeconds = targetSec;
+ document.querySelectorAll(".timer-preset button").forEach(b => b.classList.remove("active"));
+ btn.classList.add("active"); updateTimerDisplay();
+}
+
+document.getElementById("startTimerBtn").onclick = function(){
+ if(timerInterval) return;
+ timerInterval = setInterval(()=>{
+  timerSeconds++; updateTimerDisplay();
+  if(timerMode === "pomo" && timerSeconds >= timerTargetSeconds){
+   clearInterval(timerInterval); timerInterval = null;
+   alert("🎉 뽀모도로 타이머 시간이 종료되었습니다!"); finishTimer();
+  }
+ }, 1000);
+ document.getElementById("startTimerBtn").style.display = "none";
+ document.getElementById("pauseTimerBtn").style.display = "inline-block";
+ document.getElementById("finishTimerBtn").style.display = "block";
+};
+
+document.getElementById("pauseTimerBtn").onclick = function(){
+ clearInterval(timerInterval); timerInterval = null;
+ document.getElementById("startTimerBtn").style.display = "inline-block";
+ document.getElementById("pauseTimerBtn").style.display = "none";
+};
+
+document.getElementById("resetTimerBtn").onclick = resetTimer;
+function resetTimer(){
+ clearInterval(timerInterval); timerInterval = null; timerSeconds = 0; updateTimerDisplay();
+ document.getElementById("startTimerBtn").style.display = "inline-block";
+ document.getElementById("pauseTimerBtn").style.display = "none";
+ document.getElementById("finishTimerBtn").style.display = "none";
+}
+
+document.getElementById("finishTimerBtn").onclick = finishTimer;
+function finishTimer(){
+ const key = document.getElementById("timerTaskSelect").value;
+ if(key && data.doneMap){
+  data.doneMap[key] = true; save(); updateStreakLogic(); renderAll();
+  alert("✨ 타이머가 저장되고 일정 완료가 반영되었습니다!");
+ }
+ resetTimer();
+}
+
+// 🎵 Web Audio 백색소음
+function playNoise(type) {
+ stopNoise();
+ audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+ const bufferSize = audioCtx.sampleRate * 2;
+ const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+ const output = buffer.getChannelData(0);
+ for (let i = 0; i < bufferSize; i++) { output[i] = Math.random() * 2 - 1; }
+
+ noiseNode = audioCtx.createBufferSource();
+ noiseNode.buffer = buffer; noiseNode.loop = true;
+ const gain = audioCtx.createGain(); gain.gain.value = 0.05;
+ noiseNode.connect(gain); gain.connect(audioCtx.destination);
+ noiseNode.start();
+}
+function stopNoise(){ if(audioCtx){ audioCtx.close(); audioCtx = null; } }
+
+document.getElementById("asmrOff").onclick = function(){ stopNoise(); setAsmrActive(this); };
+document.getElementById("asmrRain").onclick = function(){ playNoise('rain'); setAsmrActive(this); };
+document.getElementById("asmrNoise").onclick = function(){ playNoise('noise'); setAsmrActive(this); };
+function setAsmrActive(btn){ document.querySelectorAll(".asmr-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
+
+// 📝 오답 노트 메모 관리
+document.getElementById("addNoteBtn").onclick = function(){
+ const sub = document.getElementById("noteSubject").value.trim();
+ const txt = document.getElementById("noteText").value.trim();
+ if(!sub || !txt) return alert("과목과 내용을 모두 입력해주세요!");
+ data.notes = data.notes || [];
+ data.notes.unshift({ id: Date.now(), sub, txt, date: new Date().toLocaleDateString() });
+ save(); renderNotes();
+ document.getElementById("noteSubject").value = ""; document.getElementById("noteText").value = "";
+};
+
+function renderNotes(){
+ const box = document.getElementById("noteList"); box.innerHTML = "";
+ const list = data.notes || [];
+ if(!list.length){ box.innerHTML = "<p class='sub'>등록된 오답 메모가 없습니다.</p>"; return; }
+ list.forEach(n => {
+  let div = document.createElement("div"); div.className = "note-item";
+  div.innerHTML = `<div><strong>[${n.sub}] ${n.txt}</strong><p>${n.date}</p></div>`;
+  let delBtn = document.createElement("button"); delBtn.textContent = "삭제";
+  delBtn.className = "btn danger"; delBtn.style.cssText = "width:auto;padding:6px 10px;margin:0;font-size:11px";
+  delBtn.onclick = function(){ data.notes = data.notes.filter(x=>x.id!==n.id); save(); renderNotes(); };
+  div.appendChild(delBtn); box.appendChild(div);
+ });
+}
+
+// 📊 과목별 실천 통계 비주얼 차트
+function renderSubjectChart(){
+ const chartBox = document.getElementById("subjectChart"); chartBox.innerHTML = "";
+ const subjects = {}; let maxMin = 0;
+ DAYS.forEach(d=>{
+  (plans[d]||[]).forEach(e=>{
+   if(e.done && e.cat === "study"){
+    let subjectName = e.title.split(" ")[0];
+    subjects[subjectName] = (subjects[subjectName] || 0) + (e.e - e.s);
+    if(subjects[subjectName] > maxMin) maxMin = subjects[subjectName];
+   }
+  });
+ });
+ if(Object.keys(subjects).length === 0){ chartBox.innerHTML = "<p class='sub'>이번 주 완성된 공부 데이터가 없습니다.</p>"; return; }
+ for(let s in subjects){
+  let min = subjects[s]; let pct = maxMin > 0 ? Math.round((min / maxMin) * 100) : 0;
+  let row = document.createElement("div"); row.className = "chart-row";
+  row.innerHTML = `<span><b>${s}</b></span><div class="chart-bg"><div class="chart-fill" style="width:${pct}%"></div></div><span>${min}분</span>`;
+  chartBox.appendChild(row);
+ }
+}
 
 function renderEvents(container,day){
  let list=plans[day]||[];container.innerHTML="";
@@ -164,40 +480,39 @@ function renderEvents(container,day){
   let div=document.createElement("div");div.className="event "+e.cat+(e.done?" done":"");
   let time=document.createElement("time");time.textContent=fmt(e.s)+"–"+fmt(e.e);
   let body=document.createElement("div");let strong=document.createElement("strong");strong.textContent=e.title;let small=document.createElement("small");small.textContent=({study:"공부",workout:"운동",rest:"휴식",meal:"식사",fixed:"고정 일정"}[e.cat]||"일정");body.append(strong,small);
-  let check=document.createElement("input");check.type="checkbox";check.className="check";check.checked=e.done;check.addEventListener("change",()=>{e.done=check.checked;data.doneMap=data.doneMap||{};data.doneMap[e.key]=check.checked;save();renderAll()});
+  let check=document.createElement("input");check.type="checkbox";check.className="check";check.checked=e.done;
+  check.addEventListener("change",()=>{
+   e.done=check.checked; data.doneMap=data.doneMap||{}; data.doneMap[e.key]=check.checked;
+   save(); updateStreakLogic(); renderAll();
+  });
   div.append(time,body,check);container.append(div);
  });
 }
 
 function renderWeek(){let buttons=document.getElementById("dayButtons");buttons.innerHTML="";DAYS.forEach(d=>{let b=document.createElement("button");b.className="day"+(selectedDay===d?" active":"");b.textContent=d.slice(0,1);b.title=d;b.onclick=()=>{selectedDay=d;renderWeek()};buttons.append(b)});renderEvents(document.getElementById("weekEvents"),selectedDay)}
 function renderToday(){let d=dayFromDate(new Date());document.getElementById("todayDate").textContent=new Date().toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric",weekday:"long"});document.getElementById("todayTitle").textContent=d+" 일정";renderEvents(document.getElementById("todayEvents"),d);let a=plans[d]||[],s=0,w=0;a.forEach(e=>{if(e.done&&e.cat==="study")s+=e.e-e.s;if(e.done&&e.cat==="workout")w+=e.e-e.s});document.getElementById("todayStudy").textContent=s+"분";document.getElementById("todayWorkout").textContent=w+"분"}
-function renderStats(){let study=0,studyDone=0,work=0,workDone=0,workDays=0,lines=[];DAYS.forEach(d=>{let s=0,sd=0,w=0,wd=0;(plans[d]||[]).forEach(e=>{if(e.cat==="study"){s+=e.e-e.s;if(e.done)sd+=e.e-e.s}if(e.cat==="workout"){w+=e.e-e.s;if(e.done)wd+=e.e-e.s}});study+=s;studyDone+=sd;work+=w;workDone+=wd;if(w)workDays++;lines.push(`<p><b>${d}</b> · 공부 ${sd}/${s}분</p>`)});let pct=study?Math.round(studyDone/study*100):0;document.getElementById("statsContent").innerHTML=`<p>공부 실천 <b>${studyDone}분</b> / 계획 ${study}분 (${pct}%)</p><div class="progress"><i style="width:${pct}%"></i></div>`;document.getElementById("aiStudyDone").textContent=studyDone+"분";document.getElementById("aiWorkoutDone").textContent=workDone+"분";document.getElementById("aiStudyRate").textContent=pct+"%";document.getElementById("aiWorkoutDays").textContent=workDays+"일";}
-function renderAll(){renderToday();renderWeek();renderStats();}
-function renderSettings(){let box=document.getElementById("timeSettings");box.innerHTML="";DAYS.forEach(d=>{let row=document.createElement("div");row.className="settingrow";let span=document.createElement("span");span.textContent=d;let input=document.createElement("input");input.type="time";input.value=data.returns[d];input.dataset.day=d;row.append(span,input);box.append(row)});document.getElementById("satWake").value=data.wakes["토요일"];document.getElementById("sunWake").value=data.wakes["일요일"];document.getElementById("sleepTime").value=data.sleep;}
+function renderStats(){let study=0,studyDone=0;DAYS.forEach(d=>{(plans[d]||[]).forEach(e=>{if(e.cat==="study"){study+=e.e-e.s;if(e.done)studyDone+=e.e-e.s}})});let pct=study?Math.round(studyDone/study*100):0;document.getElementById("statsContent").innerHTML=`<p>주간 공부 실천율 <b>${studyDone}분</b> / ${study}분 (${pct}%)</p><div class="progress"><i style="width:${pct}%"></i></div>`;if(pct >= 80) document.getElementById("badge4").classList.add("unlocked");renderSubjectChart();}
+function renderAll(){renderToday();renderWeek();renderStats();renderNotes();updateStreakUI();updateDdayUI();}
+function renderSettings(){let box=document.getElementById("timeSettings");box.innerHTML="";DAYS.forEach(d=>{let row=document.createElement("div");row.className="settingrow";let span=document.createElement("span");span.textContent=d;let input=document.createElement("input");input.type="time";input.value=data.returns[d];input.dataset.day=d;row.append(span,input);box.append(row)});document.getElementById("satWake").value=data.wakes["토요일"];document.getElementById("sunWake").value=data.wakes["일요일"];document.getElementById("sleepTime").value=data.sleep;document.getElementById("examDdayInput").value=data.examDate||"";}
 
 document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tab,.panel").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.getElementById(b.dataset.tab).classList.add("active")}));
-document.getElementById("saveSettings").onclick=()=>{document.querySelectorAll("#timeSettings input").forEach(i=>data.returns[i.dataset.day]=i.value);data.wakes["토요일"]=document.getElementById("satWake").value;data.wakes["일요일"]=document.getElementById("sunWake").value;data.sleep=document.getElementById("sleepTime").value;save();generate();alert("설정을 저장했어.")};
+document.getElementById("saveSettings").onclick=()=>{document.querySelectorAll("#timeSettings input").forEach(i=>data.returns[i.dataset.day]=i.value);data.wakes["토요일"]=document.getElementById("satWake").value;data.wakes["일요일"]=document.getElementById("sunWake").value;data.sleep=document.getElementById("sleepTime").value;data.examDate=document.getElementById("examDdayInput").value;save();generate();alert("설정을 저장했어.")};
 document.getElementById("resetChecks").onclick=()=>{if(confirm("모든 완료 체크를 초기화할까?")){data.doneMap={};save();renderAll()}};
 
-// 🤖 AI 데이터 자동 반영 이벤트 리스너
+// AI JSON 데이터 반영
 document.getElementById("applyAiDataBtn").addEventListener("click", () => {
  const rawText = document.getElementById("aiJsonInput").value.trim();
  const statusBox = document.getElementById("aiApplyStatus");
  if(!rawText) return alert("붙여넣을 JSON 데이터가 없습니다!");
  try {
-  const parsed = JSON.parse(rawText);
-  data.customPlans = parsed; // 커스텀 플랜 저장
-  save();
-  generate();
-  statusBox.textContent = "✅ 성공적으로 AI 계획표가 시간표에 반영되었습니다! '주간 시간표' 탭에서 확인해보세요.";
-  statusBox.style.color = "var(--green)";
+  data.customPlans = JSON.parse(rawText); save(); generate();
+  statusBox.textContent = "✅ 성공적으로 AI 계획표가 시간표에 반영되었습니다!"; statusBox.style.color = "var(--green)";
  } catch(e) {
-  statusBox.textContent = "❌ 오류 발생: 올바른 JSON 형식인지 확인해주세요. (" + e.message + ")";
-  statusBox.style.color = "var(--danger)";
+  statusBox.textContent = "❌ 오류 발생: 올바른 JSON 형식이 아닙니다."; statusBox.style.color = "var(--danger)";
  }
 });
 
-renderSettings();generate();
+renderSettings();generate();updateStreakLogic();
 </script>
 </body>
 </html>
