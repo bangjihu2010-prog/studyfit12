@@ -16,7 +16,6 @@ header h1{margin:0;font-size:22px}header p{margin:3px 0 0;color:#c7d2fe;font-siz
 
 main{max-width:760px;margin:auto;padding:14px 12px 100px}
 
-/* 📱 모바일 탭 글자 겹침 방지 및 크기 조절 */
 .tabs{display:flex;gap:4px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .tabs::-webkit-scrollbar{display:none}
 .tab{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 10px;font-weight:700;font-size:12px;color:var(--muted);cursor:pointer;text-align:center;white-space:nowrap}
@@ -26,7 +25,7 @@ main{max-width:760px;margin:auto;padding:14px 12px 100px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;margin:10px 0;box-shadow:0 2px 8px #17255408}
 h2{font-size:18px;margin:0 0 12px}.sub{font-size:12px;color:var(--muted);line-height:1.5}
 
-/* 스트릭 & 듀오링고 요소 */
+/* 스트릭 카드 */
 .streak-card{background:linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);border:2px solid #fed7aa;position:relative;overflow:hidden}
 .streak-banner{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .fire-box{display:flex;align-items:center;gap:12px}
@@ -36,7 +35,12 @@ h2{font-size:18px;margin:0 0 12px}.sub{font-size:12px;color:var(--muted);line-he
 .streak-info p{margin:2px 0 0;font-size:12px;color:#c2410c;font-weight:600}
 .freeze-badge{background:#e0f2fe;border:1px solid #7dd3fc;color:#0369a1;padding:6px 10px;border-radius:12px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:4px}
 
-/* 타이머 카운터 */
+/* 일일 성취율 바 */
+.daily-progress-wrap{margin-top:10px}
+.daily-progress-bar{height:10px;background:#e2e8f0;border-radius:10px;overflow:hidden;margin-top:6px}
+.daily-progress-fill{height:100%;background:var(--green);width:0%;transition:width 0.4s}
+
+/* 타이머 스타일 */
 .timer-card{background:#1e293b;color:#fff;text-align:center;border-color:#334155}
 .timer-card h2{color:#f8fafc}
 .timer-display{font-size:48px;font-weight:900;font-family:monospace;margin:12px 0;color:#38bdf8;letter-spacing:2px}
@@ -45,33 +49,33 @@ h2{font-size:18px;margin:0 0 12px}.sub{font-size:12px;color:var(--muted);line-he
 .timer-preset{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
 .timer-preset button{background:#334155;color:#f1f5f9;border:0;padding:6px 10px;border-radius:8px;font-size:12px;cursor:pointer}
 .timer-preset button.active{background:var(--blue);color:#fff;font-weight:700}
-
-/* 몰입 모드 안내 박스 */
 .focus-mode-bar{background:#0284c7;color:#fff;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;margin-bottom:10px;display:none}
 
-/* ASMR 백색소음 바 */
+/* ASMR 백색소음 */
 .asmr-box{background:#0f172a;border-radius:12px;padding:12px;margin-top:14px;border:1px solid #334155}
 .asmr-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
 .asmr-btn{background:#1e293b;color:#cbd5e1;border:1px solid #475569;border-radius:8px;padding:8px 4px;font-size:12px;cursor:pointer}
 .asmr-btn.active{background:var(--cyan);color:#fff;font-weight:700;border-color:var(--cyan)}
 
-/* 과목별 통계 비주얼 차트 */
+/* 통계 차트 */
 .chart-bar-wrap{margin:10px 0}
 .chart-row{display:grid;grid-template-columns:80px 1fr 45px;gap:8px;align-items:center;margin:7px 0;font-size:12px}
 .chart-bg{height:14px;background:#e2e8f0;border-radius:10px;overflow:hidden}
 .chart-fill{height:100%;background:var(--blue);border-radius:10px;width:0%;transition:width 0.5s}
 
-/* 뱃지 그리드 */
+/* 뱃지 */
 .badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
 .badge-item{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 4px;text-align:center;opacity:0.35;transition:all 0.3s}
 .badge-item.unlocked{opacity:1;border-color:var(--gold);box-shadow:0 2px 8px rgba(234,179,8,0.25)}
 .badge-icon{font-size:22px;display:block;margin-bottom:2px}
 .badge-name{font-size:10px;font-weight:700;color:var(--ink)}
 
-/* 오답 노트 메모 리스트 */
+/* 오답노트 */
 .note-item{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;background:#fff;display:flex;justify-content:space-between;align-items:center}
+.note-item.starred{border-color:var(--gold);background:#fefce8}
 .note-item strong{font-size:14px;display:block;margin-bottom:2px}
 .note-item p{margin:0;font-size:12px;color:var(--muted)}
+.star-btn{background:none;border:0;font-size:18px;cursor:pointer;padding:0 6px}
 
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .stat{background:#f8fafc;border-radius:13px;padding:12px}.stat b{display:block;font-size:23px;margin-top:5px}.blue{color:var(--blue)}.green{color:var(--green)}
@@ -128,7 +132,11 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
 
  <div class="card">
   <div class="sub" id="todayDate"></div><h2 id="todayTitle">오늘의 남은 일정</h2>
-  <div class="stats">
+  <div class="daily-progress-wrap">
+   <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700"><span>오늘 달성 성취율</span><span id="dailyPctText">0%</span></div>
+   <div class="daily-progress-bar"><div class="daily-progress-fill" id="dailyProgressFill"></div></div>
+  </div>
+  <div class="stats" style="margin-top:12px">
    <div class="stat"><span class="sub">공부 실천</span><b class="blue" id="todayStudy">0분</b></div>
    <div class="stat"><span class="sub">운동 실천</span><b class="green" id="todayWorkout">0분</b></div>
   </div>
@@ -136,17 +144,19 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
  <div class="card"><h2>실시간 일정 피드</h2><div id="todayEvents"></div></div>
 </section>
 
-<!-- ⏱️ 학습 스톱워치 / 뽀모도로 / 몰입 모드 / ASMR 백색소음 -->
+<!-- ⏱️ 학습 스톱워치 / 뽀모도로(휴식 연동) / 몰입 모드 / ASMR 백색소음 -->
 <section id="timer" class="panel">
  <div class="card timer-card">
-  <h2>⏱️ 실시간 학습 타이머</h2>
+  <h2 id="timerTitleHeader">⏱️ 실시간 학습 타이머</h2>
   <div class="focus-mode-bar" id="focusModeBar">🔒 집중 몰입 모드 작동 중 (화면 유지 및 딴짓 감지 중)</div>
-  <p class="sub" style="color:#94a3b8">측정할 일정을 선택하고 집중 공부를 시작하세요.</p>
+  <p class="sub" style="color:#94a3b8" id="timerSubText">측정할 일정을 선택하고 집중 공부를 시작하세요.</p>
   
-  <label style="color:#cbd5e1;text-align:left">학습/운동 일정 선택</label>
-  <select id="timerTaskSelect" style="background:#0f172a;color:#fff;border-color:#334155;margin-bottom:12px"></select>
+  <div id="timerTaskSelectWrap">
+   <label style="color:#cbd5e1;text-align:left">학습/운동 일정 선택</label>
+   <select id="timerTaskSelect" style="background:#0f172a;color:#fff;border-color:#334155;margin-bottom:12px"></select>
+  </div>
 
-  <div class="timer-preset">
+  <div class="timer-preset" id="timerPresetGroup">
    <button class="active" id="modeStopwatch">스톱워치</button>
    <button id="modePomo25">뽀모도로 (25분)</button>
    <button id="modePomo50">뽀모도로 (50분)</button>
@@ -173,11 +183,11 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
  </div>
 </section>
 
-<!-- 📝 과목별 오답 노트 및 핵심 정리 -->
+<!-- 📝 오답 노트 (별표 중요 표시 기능 추가) -->
 <section id="notes" class="panel">
  <div class="card">
   <h2>📝 과목별 오답 노트 & 메모</h2>
-  <p class="sub">복습이 필요한 문제나 핵심 개념을 바로 작성하세요.</p>
+  <p class="sub">복습이 필요한 문제나 핵심 개념을 작성하세요.</p>
   <label>과목 선택</label>
   <input type="text" id="noteSubject" placeholder="예: 수학, 영어">
   <label>내용 / 틀린 이유 메모</label>
@@ -185,12 +195,12 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
   <button class="btn" id="addNoteBtn">➕ 오답 노트 추가</button>
  </div>
  <div class="card">
-  <h2>저장된 메모 목록</h2>
+  <h2>저장된 메모 목록 (⭐ 중요순 정렬)</h2>
   <div id="noteList"></div>
  </div>
 </section>
 
-<!-- 📊 실천 통계 시각화 및 배지 -->
+<!-- 📊 실천 통계 및 배지 -->
 <section id="stats" class="panel">
  <div class="card">
   <h2>🏆 학습 보상 배지</h2>
@@ -238,7 +248,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
  </div>
 </section>
 
-<footer>StudyFit AI · 스마트 타이머 & 몰입 방지 시스템</footer>
+<footer>StudyFit AI · 스마트 타이머 & 효율성 극대화 시스템</footer>
 </main>
 
 <script>
@@ -286,7 +296,6 @@ function makeDay(day){
 function generate(){plans={};DAYS.forEach(d=>plans[d]=makeDay(d));save();renderAll();populateTimerSelect();}
 function fmt(n){return clock(n)}
 
-// 🚩 D-Day 계산기
 function updateDdayUI(){
  const ddayEl = document.getElementById("headerDdayVal");
  if(!data.examDate){ ddayEl.textContent = "D-Day 설정"; return; }
@@ -298,7 +307,6 @@ function updateDdayUI(){
  else ddayEl.textContent = "D+" + Math.abs(diffDays);
 }
 
-// 🔥 스트릭 & ❄️ 프리즈 로직
 function updateStreakLogic(){
  const todayStr = new Date().toISOString().split('T')[0];
  const todayName = dayFromDate(new Date());
@@ -336,14 +344,13 @@ function updateStreakUI(){
  if(s >= 7) document.getElementById("badge3").classList.add("unlocked");
 }
 
-// ⏱️ 타이머, 몰입 방지 & 🎵 백색소음 엔진
+// ⏱️ 타이머 & 뽀모도로(휴식 연동) 엔진
 let timerInterval = null, timerSeconds = 0, timerMode = "stopwatch", timerTargetSeconds = 0;
+let isBreakTime = false; // 휴식 시간 여부
 let wakeLock = null;
 let audioCtx = null, noiseNode = null;
 
-async function requestWakeLock() {
- try { if ('wakeLock' in navigator) { wakeLock = await navigator.wakeLock.request('screen'); } } catch (err) {}
-}
+async function requestWakeLock() { try { if ('wakeLock' in navigator) { wakeLock = await navigator.wakeLock.request('screen'); } } catch (err) {} }
 function releaseWakeLock() { if (wakeLock) { wakeLock.release(); wakeLock = null; } }
 
 document.addEventListener('visibilitychange', () => {
@@ -372,14 +379,15 @@ function populateTimerSelect(){
  if(!select.children.length){ let opt = document.createElement("option"); opt.textContent = "오늘 예정된 일정이 없습니다"; select.appendChild(opt); }
 }
 
-document.getElementById("modeStopwatch").onclick = function(){ setTimerMode("stopwatch", 0, this); };
-document.getElementById("modePomo25").onclick = function(){ setTimerMode("pomo", 25 * 60, this); };
-document.getElementById("modePomo50").onclick = function(){ setTimerMode("pomo", 50 * 60, this); };
+document.getElementById("modeStopwatch").onclick = function(){ if(!isBreakTime) setTimerMode("stopwatch", 0, this); };
+document.getElementById("modePomo25").onclick = function(){ if(!isBreakTime) setTimerMode("pomo", 25 * 60, this); };
+document.getElementById("modePomo50").onclick = function(){ if(!isBreakTime) setTimerMode("pomo", 50 * 60, this); };
 
 function setTimerMode(mode, targetSec, btn){
  resetTimer(); timerMode = mode; timerTargetSeconds = targetSec;
  document.querySelectorAll(".timer-preset button").forEach(b => b.classList.remove("active"));
- btn.classList.add("active"); updateTimerDisplay();
+ if(btn) btn.classList.add("active");
+ updateTimerDisplay();
 }
 
 document.getElementById("startTimerBtn").onclick = function(){
@@ -388,14 +396,37 @@ document.getElementById("startTimerBtn").onclick = function(){
  document.getElementById("focusModeBar").style.display = "block";
  timerInterval = setInterval(()=>{
   timerSeconds++; updateTimerDisplay();
-  if(timerMode === "pomo" && timerSeconds >= timerTargetSeconds){
+  if(timerMode === "pomo" && !isBreakTime && timerSeconds >= timerTargetSeconds){
    clearInterval(timerInterval); timerInterval = null;
-   alert("🎉 뽀모도로 타이머 시간이 종료되었습니다!"); finishTimer();
+   
+   // 🍅 뽀모도로 종료 후 자동으로 휴식 시간 시작 (25분->5분휴식, 50분->10분휴식)
+   let breakSec = timerTargetSeconds === 25 * 60 ? 5 * 60 : 10 * 60;
+   isBreakTime = true;
+   timerSeconds = 0;
+   timerTargetSeconds = breakSec;
+   
+   document.getElementById("timerTitleHeader").textContent = "🍅 휴식 시간 (Relax)";
+   document.getElementById("timerSubText").textContent = "머리를 식히고 가볍게 휴식하세요!";
+   document.getElementById("timerTaskSelectWrap").style.display = "none";
+   document.getElementById("timerPresetGroup").style.display = "none";
+   document.getElementById("finishTimerBtn").style.display = "none";
+   
+   alert("🎉 뽀모도로 집중 완료! 이어서 자동 휴식 타이머가 시작됩니다 🍅");
+   
+   // 휴식 타이머 재시작
+   timerInterval = setInterval(()=>{
+    timerSeconds++; updateTimerDisplay();
+    if(timerSeconds >= timerTargetSeconds){
+     clearInterval(timerInterval); timerInterval = null;
+     alert("🔔 휴식 시간이 종료되었습니다! 다음 공부를 준비하세요.");
+     resetTimer();
+    }
+   }, 1000);
   }
  }, 1000);
  document.getElementById("startTimerBtn").style.display = "none";
  document.getElementById("pauseTimerBtn").style.display = "inline-block";
- document.getElementById("finishTimerBtn").style.display = "block";
+ if(!isBreakTime) document.getElementById("finishTimerBtn").style.display = "block";
 };
 
 document.getElementById("pauseTimerBtn").onclick = function(){
@@ -408,7 +439,12 @@ document.getElementById("pauseTimerBtn").onclick = function(){
 document.getElementById("resetTimerBtn").onclick = resetTimer;
 function resetTimer(){
  clearInterval(timerInterval); timerInterval = null; releaseWakeLock();
- timerSeconds = 0; updateTimerDisplay();
+ timerSeconds = 0; isBreakTime = false;
+ document.getElementById("timerTitleHeader").textContent = "⏱️ 실시간 학습 타이머";
+ document.getElementById("timerSubText").textContent = "측정할 일정을 선택하고 집중 공부를 시작하세요.";
+ document.getElementById("timerTaskSelectWrap").style.display = "block";
+ document.getElementById("timerPresetGroup").style.display = "flex";
+ updateTimerDisplay();
  document.getElementById("focusModeBar").style.display = "none";
  document.getElementById("startTimerBtn").style.display = "inline-block";
  document.getElementById("pauseTimerBtn").style.display = "none";
@@ -446,28 +482,50 @@ document.getElementById("asmrRain").onclick = function(){ playNoise('rain'); set
 document.getElementById("asmrNoise").onclick = function(){ playNoise('noise'); setAsmrActive(this); };
 function setAsmrActive(btn){ document.querySelectorAll(".asmr-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
 
-// 📝 오답노트
+// 📝 오답노트 (⭐ 별표 중요순 정렬)
 document.getElementById("addNoteBtn").onclick = function(){
  const sub = document.getElementById("noteSubject").value.trim();
  const txt = document.getElementById("noteText").value.trim();
  if(!sub || !txt) return alert("과목과 내용을 모두 입력해주세요!");
  data.notes = data.notes || [];
- data.notes.unshift({ id: Date.now(), sub, txt, date: new Date().toLocaleDateString() });
+ data.notes.unshift({ id: Date.now(), sub, txt, starred: false, date: new Date().toLocaleDateString() });
  save(); renderNotes();
  document.getElementById("noteSubject").value = ""; document.getElementById("noteText").value = "";
 };
 
 function renderNotes(){
  const box = document.getElementById("noteList"); box.innerHTML = "";
- const list = data.notes || [];
+ let list = data.notes || [];
  if(!list.length){ box.innerHTML = "<p class='sub'>등록된 오답 메모가 없습니다.</p>"; return; }
+ 
+ // 별표(starred)가 켜진 항목이 위로 오도록 정렬
+ list.sort((a,b)=>(b.starred===true)-(a.starred===true));
+
  list.forEach(n => {
-  let div = document.createElement("div"); div.className = "note-item";
-  div.innerHTML = `<div><strong>[${n.sub}] ${n.txt}</strong><p>${n.date}</p></div>`;
+  let div = document.createElement("div"); div.className = "note-item" + (n.starred ? " starred" : "");
+  
+  let left = document.createElement("div");
+  left.innerHTML = `<strong>[${n.sub}] ${n.txt}</strong><p>${n.date}</p>`;
+  
+  let right = document.createElement("div");
+  right.style.display = "flex"; right.style.alignItems = "center"; right.style.gap = "4px";
+
+  let starBtn = document.createElement("button");
+  starBtn.className = "star-btn";
+  starBtn.textContent = n.starred ? "⭐" : "☆";
+  starBtn.title = "중요 표시";
+  starBtn.onclick = function(){
+   n.starred = !n.starred;
+   save(); renderNotes();
+  };
+
   let delBtn = document.createElement("button"); delBtn.textContent = "삭제";
-  delBtn.className = "btn danger"; delBtn.style.cssText = "width:auto;padding:6px 10px;margin:0;font-size:11px";
+  delBtn.className = "btn danger"; delBtn.style.cssText = "width:auto;padding:5px 8px;margin:0;font-size:11px";
   delBtn.onclick = function(){ data.notes = data.notes.filter(x=>x.id!==n.id); save(); renderNotes(); };
-  div.appendChild(delBtn); box.appendChild(div);
+
+  right.append(starBtn, delBtn);
+  div.append(left, right);
+  box.appendChild(div);
  });
 }
 
@@ -533,10 +591,20 @@ function renderToday(){
  document.getElementById("todayTitle").textContent=d+" 남은 일정";
  renderEvents(document.getElementById("todayEvents"), d, true);
 
- let a=plans[d]||[],s=0,w=0;
- a.forEach(e=>{if(e.done&&e.cat==="study")s+=e.e-e.s;if(e.done&&e.cat==="workout")w+=e.e-e.s});
+ let a=plans[d]||[],s=0,w=0, totalCount=a.length, doneCount=0;
+ a.forEach(e=>{
+  if(e.done) doneCount++;
+  if(e.done&&e.cat==="study")s+=e.e-e.s;
+  if(e.done&&e.cat==="workout")w+=e.e-e.s;
+ });
+ 
  document.getElementById("todayStudy").textContent=s+"분";
  document.getElementById("todayWorkout").textContent=w+"분";
+
+ // 🎯 일일 성취율 퍼센트 바 계산
+ let dayPct = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
+ document.getElementById("dailyPctText").textContent = dayPct + "%";
+ document.getElementById("dailyProgressFill").style.width = dayPct + "%";
 }
 
 function renderStats(){
