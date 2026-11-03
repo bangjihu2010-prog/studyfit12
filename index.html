@@ -42,6 +42,9 @@ h2{font-size:18px;margin:0 0 12px}.sub{font-size:12px;color:var(--muted);line-he
 .timer-preset button{background:#334155;color:#f1f5f9;border:0;padding:6px 10px;border-radius:8px;font-size:12px;cursor:pointer}
 .timer-preset button.active{background:var(--blue);color:#fff;font-weight:700}
 
+/* 몰입 모드 안내 박스 */
+.focus-mode-bar{background:#0284c7;color:#fff;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;margin-bottom:10px;display:none}
+
 /* ASMR 백색소음 바 */
 .asmr-box{background:#0f172a;border-radius:12px;padding:12px;margin-top:14px;border:1px solid #334155}
 .asmr-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
@@ -120,19 +123,20 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
  </div>
 
  <div class="card">
-  <div class="sub" id="todayDate"></div><h2 id="todayTitle">오늘의 계획</h2>
+  <div class="sub" id="todayDate"></div><h2 id="todayTitle">오늘의 남은 일정</h2>
   <div class="stats">
    <div class="stat"><span class="sub">공부 실천</span><b class="blue" id="todayStudy">0분</b></div>
    <div class="stat"><span class="sub">운동 실천</span><b class="green" id="todayWorkout">0분</b></div>
   </div>
  </div>
- <div class="card"><h2>오늘의 일정</h2><div id="todayEvents"></div></div>
+ <div class="card"><h2>실시간 일정 피드</h2><div id="todayEvents"></div></div>
 </section>
 
-<!-- ⏱️ 학습 스톱워치 / 뽀모도로 / ASMR 백색소음 -->
+<!-- ⏱️ 학습 스톱워치 / 뽀모도로 / 몰입 모드 / ASMR 백색소음 -->
 <section id="timer" class="panel">
  <div class="card timer-card">
   <h2>⏱️ 실시간 학습 타이머</h2>
+  <div class="focus-mode-bar" id="focusModeBar">🔒 집중 몰입 모드 작동 중 (화면 유지 및 딴짓 감지 중)</div>
   <p class="sub" style="color:#94a3b8">측정할 일정을 선택하고 집중 공부를 시작하세요.</p>
   
   <label style="color:#cbd5e1;text-align:left">학습/운동 일정 선택</label>
@@ -230,7 +234,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
  </div>
 </section>
 
-<footer>StudyFit AI · 올인원 플래너</footer>
+<footer>StudyFit AI · 스마트 타이머 & 몰입 방지 시스템</footer>
 </main>
 
 <script>
@@ -304,14 +308,10 @@ function updateStreakLogic(){
 
    if (data.lastCompletedDate === yStr) { data.streak += 1; }
    else if (data.lastCompletedDate && data.lastCompletedDate !== todayStr) {
-    // 날짜가 뚫렸을 때 프리즈 확인
     if (data.freeze > 0) {
-     data.freeze -= 1; // 프리즈 차감으로 스트릭 보존!
-     data.streak += 1;
+     data.freeze -= 1; data.streak += 1;
      alert("❄️ 스트릭 프리즈가 적용되어 연속 스트릭이 유지되었습니다!");
-    } else {
-     data.streak = 1;
-    }
+    } else { data.streak = 1; }
    } else { data.streak = 1; }
    data.lastCompletedDate = todayStr;
    save();
@@ -332,9 +332,21 @@ function updateStreakUI(){
  if(s >= 7) document.getElementById("badge3").classList.add("unlocked");
 }
 
-// ⏱️ 타이머 & 🎵 백색소음 엔진
+// ⏱️ 타이머, 몰입 방지 & 🎵 백색소음 엔진
 let timerInterval = null, timerSeconds = 0, timerMode = "stopwatch", timerTargetSeconds = 0;
+let wakeLock = null;
 let audioCtx = null, noiseNode = null;
+
+async function requestWakeLock() {
+ try { if ('wakeLock' in navigator) { wakeLock = await navigator.wakeLock.request('screen'); } } catch (err) {}
+}
+function releaseWakeLock() { if (wakeLock) { wakeLock.release(); wakeLock = null; } }
+
+document.addEventListener('visibilitychange', () => {
+ if (!document.hidden && timerInterval) {
+  alert("⚠️ 집중 모드 중 이탈 감지!\n인스타그램이나 유튜브 등 딴짓 앱으로 이동하지 말고 공부에 계속 몰입하세요!");
+ }
+});
 
 function updateTimerDisplay(){
  let sec = timerMode === "stopwatch" ? timerSeconds : Math.max(0, timerTargetSeconds - timerSeconds);
@@ -368,6 +380,8 @@ function setTimerMode(mode, targetSec, btn){
 
 document.getElementById("startTimerBtn").onclick = function(){
  if(timerInterval) return;
+ requestWakeLock();
+ document.getElementById("focusModeBar").style.display = "block";
  timerInterval = setInterval(()=>{
   timerSeconds++; updateTimerDisplay();
   if(timerMode === "pomo" && timerSeconds >= timerTargetSeconds){
@@ -381,14 +395,17 @@ document.getElementById("startTimerBtn").onclick = function(){
 };
 
 document.getElementById("pauseTimerBtn").onclick = function(){
- clearInterval(timerInterval); timerInterval = null;
+ clearInterval(timerInterval); timerInterval = null; releaseWakeLock();
+ document.getElementById("focusModeBar").style.display = "none";
  document.getElementById("startTimerBtn").style.display = "inline-block";
  document.getElementById("pauseTimerBtn").style.display = "none";
 };
 
 document.getElementById("resetTimerBtn").onclick = resetTimer;
 function resetTimer(){
- clearInterval(timerInterval); timerInterval = null; timerSeconds = 0; updateTimerDisplay();
+ clearInterval(timerInterval); timerInterval = null; releaseWakeLock();
+ timerSeconds = 0; updateTimerDisplay();
+ document.getElementById("focusModeBar").style.display = "none";
  document.getElementById("startTimerBtn").style.display = "inline-block";
  document.getElementById("pauseTimerBtn").style.display = "none";
  document.getElementById("finishTimerBtn").style.display = "none";
@@ -404,7 +421,7 @@ function finishTimer(){
  resetTimer();
 }
 
-// 🎵 Web Audio 백색소음
+// 🎵 백색소음
 function playNoise(type) {
  stopNoise();
  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -412,7 +429,6 @@ function playNoise(type) {
  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
  const output = buffer.getChannelData(0);
  for (let i = 0; i < bufferSize; i++) { output[i] = Math.random() * 2 - 1; }
-
  noiseNode = audioCtx.createBufferSource();
  noiseNode.buffer = buffer; noiseNode.loop = true;
  const gain = audioCtx.createGain(); gain.gain.value = 0.05;
@@ -426,7 +442,7 @@ document.getElementById("asmrRain").onclick = function(){ playNoise('rain'); set
 document.getElementById("asmrNoise").onclick = function(){ playNoise('noise'); setAsmrActive(this); };
 function setAsmrActive(btn){ document.querySelectorAll(".asmr-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
 
-// 📝 오답 노트 메모 관리
+// 📝 오답노트
 document.getElementById("addNoteBtn").onclick = function(){
  const sub = document.getElementById("noteSubject").value.trim();
  const txt = document.getElementById("noteText").value.trim();
@@ -451,7 +467,7 @@ function renderNotes(){
  });
 }
 
-// 📊 과목별 실천 통계 비주얼 차트
+// 📊 통계 차트
 function renderSubjectChart(){
  const chartBox = document.getElementById("subjectChart"); chartBox.innerHTML = "";
  const subjects = {}; let maxMin = 0;
@@ -473,9 +489,20 @@ function renderSubjectChart(){
  }
 }
 
-function renderEvents(container,day){
- let list=plans[day]||[];container.innerHTML="";
- if(!list.length){container.innerHTML='<p class="sub">등록된 일정이 없어.</p>';return}
+function renderEvents(container, day, isToday=false){
+ let list = plans[day] || [];
+ container.innerHTML = "";
+ 
+ // 오늘 탭일 경우, 이미 끝난 시간대의 일정은 숨김 처리
+ if(isToday) {
+  const now = new Date();
+  const currentMins = now.getHours() * 60 + now.getMinutes();
+  // 종료 시간이 현재 시각보다 이전인 일정은 제외 (단, 완료되지 않았거나 진행 중인 것은 유지)
+  list = list.filter(e => e.e > currentMins);
+ }
+
+ if(!list.length){ container.innerHTML='<p class="sub">오늘 남은 일정이 없습니다! 수고하셨습니다 👏</p>'; return; }
+ 
  list.forEach(e=>{
   let div=document.createElement("div");div.className="event "+e.cat+(e.done?" done":"");
   let time=document.createElement("time");time.textContent=fmt(e.s)+"–"+fmt(e.e);
@@ -489,17 +516,71 @@ function renderEvents(container,day){
  });
 }
 
-function renderWeek(){let buttons=document.getElementById("dayButtons");buttons.innerHTML="";DAYS.forEach(d=>{let b=document.createElement("button");b.className="day"+(selectedDay===d?" active":"");b.textContent=d.slice(0,1);b.title=d;b.onclick=()=>{selectedDay=d;renderWeek()};buttons.append(b)});renderEvents(document.getElementById("weekEvents"),selectedDay)}
-function renderToday(){let d=dayFromDate(new Date());document.getElementById("todayDate").textContent=new Date().toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric",weekday:"long"});document.getElementById("todayTitle").textContent=d+" 일정";renderEvents(document.getElementById("todayEvents"),d);let a=plans[d]||[],s=0,w=0;a.forEach(e=>{if(e.done&&e.cat==="study")s+=e.e-e.s;if(e.done&&e.cat==="workout")w+=e.e-e.s});document.getElementById("todayStudy").textContent=s+"분";document.getElementById("todayWorkout").textContent=w+"분"}
-function renderStats(){let study=0,studyDone=0;DAYS.forEach(d=>{(plans[d]||[]).forEach(e=>{if(e.cat==="study"){study+=e.e-e.s;if(e.done)studyDone+=e.e-e.s}})});let pct=study?Math.round(studyDone/study*100):0;document.getElementById("statsContent").innerHTML=`<p>주간 공부 실천율 <b>${studyDone}분</b> / ${study}분 (${pct}%)</p><div class="progress"><i style="width:${pct}%"></i></div>`;if(pct >= 80) document.getElementById("badge4").classList.add("unlocked");renderSubjectChart();}
-function renderAll(){renderToday();renderWeek();renderStats();renderNotes();updateStreakUI();updateDdayUI();}
-function renderSettings(){let box=document.getElementById("timeSettings");box.innerHTML="";DAYS.forEach(d=>{let row=document.createElement("div");row.className="settingrow";let span=document.createElement("span");span.textContent=d;let input=document.createElement("input");input.type="time";input.value=data.returns[d];input.dataset.day=d;row.append(span,input);box.append(row)});document.getElementById("satWake").value=data.wakes["토요일"];document.getElementById("sunWake").value=data.wakes["일요일"];document.getElementById("sleepTime").value=data.sleep;document.getElementById("examDdayInput").value=data.examDate||"";}
+function renderWeek(){
+ let buttons=document.getElementById("dayButtons");buttons.innerHTML="";
+ DAYS.forEach(d=>{
+  let b=document.createElement("button");b.className="day"+(selectedDay===d?" active":"");
+  b.textContent=d.slice(0,1);b.title=d;b.onclick=()=>{selectedDay=d;renderWeek()};buttons.append(b)
+ });
+ // 주간 탭에서는 모든 일정 표시 (isToday = false)
+ renderEvents(document.getElementById("weekEvents"), selectedDay, false);
+}
 
-document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tab,.panel").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.getElementById(b.dataset.tab).classList.add("active")}));
-document.getElementById("saveSettings").onclick=()=>{document.querySelectorAll("#timeSettings input").forEach(i=>data.returns[i.dataset.day]=i.value);data.wakes["토요일"]=document.getElementById("satWake").value;data.wakes["일요일"]=document.getElementById("sunWake").value;data.sleep=document.getElementById("sleepTime").value;data.examDate=document.getElementById("examDdayInput").value;save();generate();alert("설정을 저장했어.")};
+function renderToday(){
+ let d=dayFromDate(new Date());
+ document.getElementById("todayDate").textContent=new Date().toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric",weekday:"long"});
+ document.getElementById("todayTitle").textContent=d+" 남은 일정";
+ 
+ // 오늘 탭에서는 지난 시간 일정 숨김 적용 (isToday = true)
+ renderEvents(document.getElementById("todayEvents"), d, true);
+
+ let a=plans[d]||[],s=0,w=0;
+ a.forEach(e=>{if(e.done&&e.cat==="study")s+=e.e-e.s;if(e.done&&e.cat==="workout")w+=e.e-e.s});
+ document.getElementById("todayStudy").textContent=s+"분";
+ document.getElementById("todayWorkout").textContent=w+"분";
+}
+
+function renderStats(){
+ let study=0,studyDone=0;
+ DAYS.forEach(d=>{(plans[d]||[]).forEach(e=>{if(e.cat==="study"){study+=e.e-e.s;if(e.done)studyDone+=e.e-e.s}})});
+ let pct=study?Math.round(studyDone/study*100):0;
+ document.getElementById("statsContent").innerHTML=`<p>주간 공부 실천율 <b>${studyDone}분</b> / ${study}분 (${pct}%)</p><div class="progress"><i style="width:${pct}%"></i></div>`;
+ if(pct >= 80) document.getElementById("badge4").classList.add("unlocked");
+ renderSubjectChart();
+}
+
+function renderAll(){renderToday();renderWeek();renderStats();renderNotes();updateStreakUI();updateDdayUI();}
+
+function renderSettings(){
+ let box=document.getElementById("timeSettings");box.innerHTML="";
+ DAYS.forEach(d=>{
+  let row=document.createElement("div");row.className="settingrow";
+  let span=document.createElement("span");span.textContent=d;
+  let input=document.createElement("input");input.type="time";input.value=data.returns[d];input.dataset.day=d;
+  row.append(span,input);box.append(row);
+ });
+ document.getElementById("satWake").value=data.wakes["토요일"];
+ document.getElementById("sunWake").value=data.wakes["일요일"];
+ document.getElementById("sleepTime").value=data.sleep;
+ document.getElementById("examDdayInput").value=data.examDate||"";
+}
+
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{
+ document.querySelectorAll(".tab,.panel").forEach(x=>x.classList.remove("active"));
+ b.classList.add("active");document.getElementById(b.dataset.tab).classList.add("active")
+}));
+
+document.getElementById("saveSettings").onclick=()=>{
+ document.querySelectorAll("#timeSettings input").forEach(i=>data.returns[i.dataset.day]=i.value);
+ data.wakes["토요일"]=document.getElementById("satWake").value;
+ data.wakes["일요일"]=document.getElementById("sunWake").value;
+ data.sleep=document.getElementById("sleepTime").value;
+ data.examDate=document.getElementById("examDdayInput").value;
+ save();generate();alert("설정을 저장했어.");
+};
+
 document.getElementById("resetChecks").onclick=()=>{if(confirm("모든 완료 체크를 초기화할까?")){data.doneMap={};save();renderAll()}};
 
-// AI JSON 데이터 반영
 document.getElementById("applyAiDataBtn").addEventListener("click", () => {
  const rawText = document.getElementById("aiJsonInput").value.trim();
  const statusBox = document.getElementById("aiApplyStatus");
