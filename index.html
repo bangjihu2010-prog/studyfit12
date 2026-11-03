@@ -9,15 +9,19 @@
 :root{--bg:#f4f6fb;--card:#fff;--ink:#172033;--muted:#687386;--line:#e5e9f1;--blue:#2563eb;--green:#16a34a;--orange:#f97316;--purple:#7c3aed;--gold:#eab308;--red:#ef4444;--cyan:#06b6d4}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
 header{background:#172554;color:#fff;padding:22px 18px 18px;padding-top:calc(18px + env(safe-area-inset-top));display:flex;justify-content:space-between;align-items:center}
-header h1{margin:0;font-size:24px}header p{margin:3px 0 0;color:#c7d2fe;font-size:12px}
-.header-badges{display:flex;gap:6px;align-items:center}
-.header-streak{background:rgba(255,255,255,0.15);padding:6px 12px;border-radius:20px;display:flex;align-items:center;gap:4px;font-weight:800;color:#ffedd5;font-size:13px}
-.header-dday{background:var(--purple);padding:6px 12px;border-radius:20px;font-weight:800;color:#fff;font-size:13px}
+header h1{margin:0;font-size:22px}header p{margin:3px 0 0;color:#c7d2fe;font-size:11px}
+.header-badges{display:flex;gap:5px;align-items:center}
+.header-streak{background:rgba(255,255,255,0.15);padding:5px 10px;border-radius:20px;display:flex;align-items:center;gap:4px;font-weight:800;color:#ffedd5;font-size:12px}
+.header-dday{background:var(--purple);padding:5px 10px;border-radius:20px;font-weight:800;color:#fff;font-size:12px}
 
-main{max-width:760px;margin:auto;padding:14px 13px 100px}
-.tabs{display:flex;gap:5px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5;overflow-x:auto}
-.tab{flex:1;min-width:64px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 2px;font-weight:700;font-size:13px;color:var(--muted);cursor:pointer;text-align:center;white-space:nowrap}
+main{max-width:760px;margin:auto;padding:14px 12px 100px}
+
+/* 📱 모바일 탭 글자 겹침 방지 및 크기 조절 */
+.tabs{display:flex;gap:4px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 10px;font-weight:700;font-size:12px;color:var(--muted);cursor:pointer;text-align:center;white-space:nowrap}
 .tab.active{background:#172554;color:#fff;border-color:#172554}
+
 .panel{display:none}.panel.active{display:block}
 .card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;margin:10px 0;box-shadow:0 2px 8px #17255408}
 h2{font-size:18px;margin:0 0 12px}.sub{font-size:12px;color:var(--muted);line-height:1.5}
@@ -493,11 +497,9 @@ function renderEvents(container, day, isToday=false){
  let list = plans[day] || [];
  container.innerHTML = "";
  
- // 오늘 탭일 경우, 이미 끝난 시간대의 일정은 숨김 처리
  if(isToday) {
   const now = new Date();
   const currentMins = now.getHours() * 60 + now.getMinutes();
-  // 종료 시간이 현재 시각보다 이전인 일정은 제외 (단, 완료되지 않았거나 진행 중인 것은 유지)
   list = list.filter(e => e.e > currentMins);
  }
 
@@ -522,7 +524,6 @@ function renderWeek(){
   let b=document.createElement("button");b.className="day"+(selectedDay===d?" active":"");
   b.textContent=d.slice(0,1);b.title=d;b.onclick=()=>{selectedDay=d;renderWeek()};buttons.append(b)
  });
- // 주간 탭에서는 모든 일정 표시 (isToday = false)
  renderEvents(document.getElementById("weekEvents"), selectedDay, false);
 }
 
@@ -530,8 +531,6 @@ function renderToday(){
  let d=dayFromDate(new Date());
  document.getElementById("todayDate").textContent=new Date().toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric",weekday:"long"});
  document.getElementById("todayTitle").textContent=d+" 남은 일정";
- 
- // 오늘 탭에서는 지난 시간 일정 숨김 적용 (isToday = true)
  renderEvents(document.getElementById("todayEvents"), d, true);
 
  let a=plans[d]||[],s=0,w=0;
