@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#172554">
+<title>StudyFit 모바일</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#172033;--muted:#687386;--line:#e5e9f1;--blue:#2563eb;--green:#16a34a;--purple:#7c3aed}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+header{background:#172554;color:#fff;padding:22px 18px 18px;padding-top:calc(18px + env(safe-area-inset-top))}
+header h1{margin:0;font-size:24px}header p{margin:5px 0 0;color:#c7d2fe;font-size:13px}
+main{max-width:760px;margin:auto;padding:14px 13px 100px}
+.tabs{display:flex;gap:7px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5}
+.tab{flex:1;border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 4px;font-weight:700;color:var(--muted)}
+.tab.active{background:#172554;color:#fff;border-color:#172554}
+.panel{display:none}.panel.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;margin:10px 0;box-shadow:0 2px 8px #17255408}
+h2{font-size:18px;margin:0 0 12px}.sub{font-size:12px;color:var(--muted);line-height:1.5}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.stat{background:#f8fafc;border-radius:13px;padding:12px}.stat b{display:block;font-size:23px;margin-top:5px}.blue{color:var(--blue)}.green{color:var(--green)}
+select,input,button{font:inherit}select,input[type=time],input[type=text]{width:100%;padding:11px;border:1px solid #d8deea;border-radius:10px;background:#fff;color:var(--ink);min-height:42px}
+label{display:block;font-size:13px;font-weight:650;margin:11px 0 5px}
+.days{display:flex;gap:6px;overflow:auto;padding:2px 0 10px}.day{flex:0 0 auto;border:1px solid var(--line);border-radius:10px;background:#fff;padding:9px 12px;color:var(--muted);font-weight:700}.day.active{background:#dbeafe;border-color:#93c5fd;color:#1d4ed8}
+.event{display:grid;grid-template-columns:92px 1fr auto;gap:9px;align-items:center;border:1px solid var(--line);border-left:5px solid #94a3b8;border-radius:12px;padding:11px;margin:8px 0;background:#fff}
+.event.study{border-left-color:#3b82f6}.event.workout{border-left-color:#16a34a}.event.fixed{border-left-color:#ef4444}.event.meal{border-left-color:#eab308}
+.event time{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}.event strong{font-size:14px}.event small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.event.done{opacity:.55}.event.done strong{text-decoration:line-through}
+.check{width:23px;height:23px;accent-color:var(--green)}
+.btn{border:0;border-radius:11px;padding:12px 14px;font-weight:750;background:#172554;color:#fff;width:100%;margin-top:10px}
+.btn.secondary{background:#e8eefc;color:#1e3a8a}.btn.danger{background:#fee2e2;color:#991b1b}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.settingrow{display:grid;grid-template-columns:82px 1fr;gap:10px;align-items:center;margin:9px 0}.settingrow span{font-size:13px;font-weight:700}
+textarea{width:100%;min-height:68px;padding:10px;border:1px solid #d8deea;border-radius:10px;font:inherit}
+.progress{height:9px;background:#e9edf5;border-radius:9px;overflow:hidden;margin:7px 0 13px}.progress i{display:block;height:100%;background:var(--blue);width:0%}
+.notice{background:#eff6ff;color:#1e40af;padding:11px;border-radius:12px;font-size:12px;line-height:1.5}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
+@media(min-width:600px){main{padding-top:20px}.event{grid-template-columns:120px 1fr auto}.card{padding:19px}}
+</style>
+</head>
+<body>
+<header><h1>StudyFit</h1><p>공부와 운동 습관을 함께 관리하는 모바일 시간표</p></header>
+<main>
+<nav class="tabs">
+<button class="tab active" data-tab="today">오늘</button>
+<button class="tab" data-tab="week">주간 시간표</button>
+<button class="tab" data-tab="settings">일정 설정</button>
+<button class="tab" data-tab="stats">기록</button>
+</nav>
+
+<section id="today" class="panel active">
+ <div class="card">
+  <div class="sub" id="todayDate"></div><h2 id="todayTitle">오늘의 계획</h2>
+  <div class="stats">
+   <div class="stat"><span class="sub">공부 실천</span><b class="blue" id="todayStudy">0분</b></div>
+   <div class="stat"><span class="sub">운동 실천</span><b class="green" id="todayWorkout">0분</b></div>
+  </div>
+ </div>
+ <div class="card"><h2>오늘의 일정</h2><div id="todayEvents"></div></div>
+ <div class="notice">일정 옆 체크를 누르면 완료 기록이 저장돼. 시간표는 설정을 바꾸고 다시 생성할 수 있어.</div>
+</section>
+
+<section id="week" class="panel">
+ <div class="card"><h2>요일별 시간표</h2><div class="days" id="dayButtons"></div><div id="weekEvents"></div></div>
+</section>
+
+<section id="settings" class="panel">
+ <div class="card">
+  <h2>개인 일정 설정</h2><p class="sub">시간은 실제 생활에 맞게 수정해. 저장하면 시간표를 다시 계산해.</p>
+  <div id="timeSettings"></div>
+  <label>토요일 기상 시간</label><input type="time" id="satWake" value="09:00">
+  <label>일요일 기상 시간</label><input type="time" id="sunWake" value="09:00">
+  <label>취침 목표</label><input type="time" id="sleepTime" value="00:30">
+  <label>공부 과목 (쉼표로 구분)</label><textarea id="subjects">수학, 영어, 국어, 한국사, 통합사회, 통합과학</textarea>
+  <label>추가 고정 일정 메모</label><input type="text" id="extraNote" placeholder="예: 토요일 14~16시 일정">
+  <button class="btn" id="saveSettings">설정 저장 및 시간표 다시 생성</button>
+ </div>
+ <div class="card"><h2>현재 반영된 조건</h2><p class="sub">월·수 22:00 귀가, 화 17:00, 목 20:30, 금 19:30 귀가. 금요일 16:00~19:00 학원. 운동 목표 주 5회. 주말 기상은 09:00 임시값이야.</p></div>
+</section>
+
+<section id="stats" class="panel">
+ <div class="card"><h2>주간 실천 현황</h2><div id="statsContent"></div></div>
+ <div class="card"><button class="btn secondary" id="resetChecks">이번 주 완료 표시 초기화</button><p class="sub">초기화하면 완료 체크만 지워지고 일정 설정은 유지돼.</p></div>
+</section>
+<footer>StudyFit 모바일 프로토타입 · 입력한 데이터는 이 브라우저에 저장됩니다.</footer>
+</main>
+<script>
+const DAYS=["월요일","화요일","수요일","목요일","금요일","토요일","일요일"];
+const DEFAULT={
+ returns:{"월요일":"22:00","화요일":"17:00","수요일":"22:00","목요일":"20:30","금요일":"19:30","토요일":"09:00","일요일":"09:00"},
+ wakes:{"토요일":"09:00","일요일":"09:00"},sleep:"00:30",
+ subjects:["수학","영어","국어","한국사","통합사회","통합과학"],note:""
+};
+let data=load(),plans={},selectedDay=dayFromDate(new Date());
+function load(){try{return {...DEFAULT,...JSON.parse(localStorage.getItem("studyfit_mobile")||"{}")}}catch(e){return structuredClone(DEFAULT)}}
+function save(){localStorage.setItem("studyfit_mobile",JSON.stringify(data));}
+function dayFromDate(d){return DAYS[(d.getDay()+6)%7]}
+function mins(t){let [h,m]=t.split(":").map(Number);return h*60+m}
+function clock(n){n=(n+1440)%1440;return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}
+function ev(a,s,e,title,cat){if(e>s)a.push({s,e,title,cat,done:false,id:Math.random().toString(36).slice(2)})}
+function makeDay(day){
+ let a=[],r=mins(data.returns[day]||"17:00"),subjects=data.subjects;
+ if(day==="월요일"||day==="수요일"){
+  ev(a,r,r+30,"귀가 및 휴식","rest");ev(a,r+30,r+50,day==="월요일"?"수학 가벼운 복습":"영어 가벼운 복습","study");ev(a,r+50,Math.min(1440,mins(data.sleep)),"자유 시간 및 취침 준비","rest");
+ }else if(day==="화요일"){
+  ev(a,r,r+30,"귀가 및 간식","rest");ev(a,r+30,r+80,"수학 집중 학습","study");ev(a,r+80,r+90,"휴식","rest");ev(a,r+90,r+130,"영어 학습","study");ev(a,r+130,r+190,"저녁 식사 및 휴식","meal");ev(a,r+190,r+230,"근력 운동","workout");ev(a,r+230,r+260,"샤워 및 휴식","rest");ev(a,r+260,r+290,"국어 학습","study");ev(a,r+290,r+310,"휴식","rest");ev(a,r+310,r+340,"한국사 복습","study");ev(a,r+340,Math.min(1440,mins(data.sleep)),"자유 시간 및 취침 준비","rest");
+ }else if(day==="목요일"){
+  ev(a,r,r+30,"귀가 및 휴식","rest");ev(a,r+30,r+55,"가벼운 근력·유연성 운동","workout");ev(a,r+55,r+65,"휴식","rest");ev(a,r+65,r+95,"통합사회 복습","study");ev(a,r+95,r+125,"저녁 및 휴식","meal");ev(a,r+125,r+145,"통합과학 복습","study");ev(a,r+145,Math.min(1440,mins(data.sleep)),"자유 시간 및 취침 준비","rest");
+ }else if(day==="금요일"){
+  ev(a,16*60,19*60,"학원 (고정 일정)","fixed");ev(a,r,r+60,"귀가 및 저녁 식사","meal");ev(a,r+60,r+80,"가벼운 유산소·스트레칭","workout");ev(a,r+80,r+90,"휴식","rest");ev(a,r+90,r+120,"주간 오답 복습","study");ev(a,r+120,Math.min(1440,mins(data.sleep)),"자유 시간 및 취침 준비","rest");
+ }else{
+  let w=mins(data.wakes[day]||"09:00");
+  if(day==="토요일"){
+   ev(a,w,w+60,"기상 및 아침 식사","meal");ev(a,w+60,w+120,"수학 집중 학습","study");ev(a,w+120,w+140,"휴식","rest");ev(a,w+140,w+185,"영어 학습","study");ev(a,w+185,w+305,"점심 및 자유 시간","meal");ev(a,w+305,w+345,"근력 운동","workout");ev(a,w+345,w+395,"샤워 및 휴식","rest");ev(a,w+395,w+445,"국어 학습","study");ev(a,w+465,w+510,"통합과학 복습","study");
+  }else{
+   ev(a,w,w+60,"기상 및 아침 식사","meal");ev(a,w+60,w+100,"한국사 복습","study");ev(a,w+100,w+120,"휴식","rest");ev(a,w+120,w+160,"통합사회 복습","study");ev(a,w+160,w+280,"점심 및 자유 시간","meal");ev(a,w+280,w+310,"가벼운 유산소 운동","workout");ev(a,w+340,w+380,"수학 오답 정리","study");ev(a,w+400,w+440,"영어 복습","study");ev(a,w+460,w+490,"다음 주 일정 확인","study");
+  }
+ }
+ return a.sort((x,y)=>x.s-y.s)
+}
+function generate(){plans={};DAYS.forEach(d=>plans[d]=makeDay(d));save();renderAll()}
+function fmt(n){return clock(n)}
+function renderEvents(container,day){
+ let list=plans[day]||[];container.innerHTML="";
+ if(!list.length){container.innerHTML='<p class="sub">등록된 일정이 없어.</p>';return}
+ list.forEach(e=>{
+  let div=document.createElement("div");div.className="event "+e.cat+(e.done?" done":"");
+  let time=document.createElement("time");time.textContent=fmt(e.s)+"–"+fmt(e.e);
+  let body=document.createElement("div");let strong=document.createElement("strong");strong.textContent=e.title;let small=document.createElement("small");small.textContent=({study:"공부",workout:"운동",rest:"휴식",meal:"식사",fixed:"고정 일정"}[e.cat]||"일정");body.append(strong,small);
+  let check=document.createElement("input");check.type="checkbox";check.className="check";check.checked=e.done;check.setAttribute("aria-label",e.title+" 완료");check.addEventListener("change",()=>{e.done=check.checked;save();renderAll()});
+  div.append(time,body,check);container.append(div);
+ });
+}
+function renderWeek(){let buttons=document.getElementById("dayButtons");buttons.innerHTML="";DAYS.forEach(d=>{let b=document.createElement("button");b.className="day"+(selectedDay===d?" active":"");b.textContent=d.slice(0,1);b.title=d;b.onclick=()=>{selectedDay=d;renderWeek()};buttons.append(b)});renderEvents(document.getElementById("weekEvents"),selectedDay)}
+function renderToday(){let d=dayFromDate(new Date());document.getElementById("todayDate").textContent=new Date().toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric",weekday:"long"});document.getElementById("todayTitle").textContent=d+" 일정";renderEvents(document.getElementById("todayEvents"),d);let a=plans[d]||[],s=0,w=0;a.forEach(e=>{if(e.done&&e.cat==="study")s+=e.e-e.s;if(e.done&&e.cat==="workout")w+=e.e-e.s});document.getElementById("todayStudy").textContent=s+"분";document.getElementById("todayWorkout").textContent=w+"분"}
+function renderStats(){let study=0,studyDone=0,work=0,workDone=0,workDays=0,lines=[];DAYS.forEach(d=>{let s=0,sd=0,w=0,wd=0;(plans[d]||[]).forEach(e=>{if(e.cat==="study"){s+=e.e-e.s;if(e.done)sd+=e.e-e.s}if(e.cat==="workout"){w+=e.e-e.s;if(e.done)wd+=e.e-e.s}});study+=s;studyDone+=sd;work+=w;workDone+=wd;if(w)workDays++;lines.push(`<p><b>${d}</b> · 공부 ${sd}/${s}분 · 운동 ${wd}/${w}분</p>`)});let pct=study?Math.round(studyDone/study*100):0;document.getElementById("statsContent").innerHTML=`<p>공부 실천 <b>${studyDone}분</b> / 계획 ${study}분 (${pct}%)</p><div class="progress"><i style="width:${pct}%"></i></div><p>운동 실천 <b>${workDone}분</b> / 계획 ${work}분</p><p>운동 배정일 ${workDays}일 / 주간 목표 5회</p><hr>${lines.join("")}`}
+function renderAll(){renderToday();renderWeek();renderStats()}
+function renderSettings(){let box=document.getElementById("timeSettings");box.innerHTML="";DAYS.forEach(d=>{let row=document.createElement("div");row.className="settingrow";let span=document.createElement("span");span.textContent=d;let input=document.createElement("input");input.type="time";input.value=data.returns[d];input.dataset.day=d;row.append(span,input);box.append(row)});document.getElementById("satWake").value=data.wakes["토요일"];document.getElementById("sunWake").value=data.wakes["일요일"];document.getElementById("sleepTime").value=data.sleep;document.getElementById("subjects").value=data.subjects.join(", ");document.getElementById("extraNote").value=data.note||""}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tab,.panel").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.getElementById(b.dataset.tab).classList.add("active")}));
+document.getElementById("saveSettings").onclick=()=>{document.querySelectorAll("#timeSettings input").forEach(i=>data.returns[i.dataset.day]=i.value);data.wakes["토요일"]=document.getElementById("satWake").value;data.wakes["일요일"]=document.getElementById("sunWake").value;data.sleep=document.getElementById("sleepTime").value;data.subjects=document.getElementById("subjects").value.split(",").map(x=>x.trim()).filter(Boolean);data.note=document.getElementById("extraNote").value;save();generate();alert("설정을 저장하고 시간표를 다시 만들었어.")};
+document.getElementById("resetChecks").onclick=()=>{if(confirm("모든 완료 체크를 초기화할까?")){DAYS.forEach(d=>plans[d].forEach(e=>e.done=false));save();renderAll()}};
+renderSettings();generate();
+</script>
+</body>
+</html>
