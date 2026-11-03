@@ -25,7 +25,7 @@ main{max-width:760px;margin:auto;padding:14px 12px 100px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;margin:10px 0;box-shadow:0 2px 8px #17255408}
 h2{font-size:18px;margin:0 0 12px}.sub{font-size:12px;color:var(--muted);line-height:1.5}
 
-/* 스트릭 카드 */
+/* 스트릭 카드 & 3일 목표 */
 .streak-card{background:linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);border:2px solid #fed7aa;position:relative;overflow:hidden}
 .streak-banner{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .fire-box{display:flex;align-items:center;gap:12px}
@@ -34,13 +34,28 @@ h2{font-size:18px;margin:0 0 12px}.sub{font-size:12px;color:var(--muted);line-he
 .streak-info h3{margin:0;font-size:19px;color:#9a3412}
 .streak-info p{margin:2px 0 0;font-size:12px;color:#c2410c;font-weight:600}
 .freeze-badge{background:#e0f2fe;border:1px solid #7dd3fc;color:#0369a1;padding:6px 10px;border-radius:12px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:4px}
+.streak-target-bar{height:6px;background:#fed7aa;border-radius:6px;overflow:hidden;margin-top:8px}
+.streak-target-fill{height:100%;background:var(--orange);width:0%}
 
-/* 일일 성취율 바 */
+/* 성취율 및 퀘스트 */
 .daily-progress-wrap{margin-top:10px}
 .daily-progress-bar{height:10px;background:#e2e8f0;border-radius:10px;overflow:hidden;margin-top:6px}
 .daily-progress-fill{height:100%;background:var(--green);width:0%;transition:width 0.4s}
+.quest-item{background:#f0fdf4;border:1px solid #bbf7d0;padding:10px;border-radius:12px;margin:8px 0;display:flex;align-items:center;justify-content:space-between}
 
-/* 타이머 스타일 */
+/* 📅 달력 디자인 */
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;margin-top:10px}
+.calendar-day-head{font-weight:700;font-size:12px;color:var(--muted);padding:6px 0}
+.calendar-cell{min-height:52px;background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:4px;font-size:11px;cursor:pointer;position:relative}
+.calendar-cell.today{border-color:var(--blue);background:#eff6ff}
+.calendar-cell .day-num{font-weight:700;margin-bottom:2px}
+.calendar-event-dot{background:var(--purple);color:#fff;border-radius:4px;font-size:9px;padding:1px 3px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* 🧠 퀴즈 카드 디자인 */
+.quiz-card{background:#faf5ff;border:1px solid #e9d5ff}
+.quiz-box{background:#fff;border:1px solid #d8b4fe;border-radius:12px;padding:14px;margin-top:10px}
+
+/* 타이머 & 기타 */
 .timer-card{background:#1e293b;color:#fff;text-align:center;border-color:#334155}
 .timer-card h2{color:#f8fafc}
 .timer-display{font-size:48px;font-weight:900;font-family:monospace;margin:12px 0;color:#38bdf8;letter-spacing:2px}
@@ -51,35 +66,23 @@ h2{font-size:18px;margin:0 0 12px}.sub{font-size:12px;color:var(--muted);line-he
 .timer-preset button.active{background:var(--blue);color:#fff;font-weight:700}
 .focus-mode-bar{background:#0284c7;color:#fff;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;margin-bottom:10px;display:none}
 
-/* ASMR 백색소음 */
 .asmr-box{background:#0f172a;border-radius:12px;padding:12px;margin-top:14px;border:1px solid #334155}
 .asmr-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
 .asmr-btn{background:#1e293b;color:#cbd5e1;border:1px solid #475569;border-radius:8px;padding:8px 4px;font-size:12px;cursor:pointer}
 .asmr-btn.active{background:var(--cyan);color:#fff;font-weight:700;border-color:var(--cyan)}
 
-/* 통계 차트 */
-.chart-bar-wrap{margin:10px 0}
-.chart-row{display:grid;grid-template-columns:80px 1fr 45px;gap:8px;align-items:center;margin:7px 0;font-size:12px}
-.chart-bg{height:14px;background:#e2e8f0;border-radius:10px;overflow:hidden}
-.chart-fill{height:100%;background:var(--blue);border-radius:10px;width:0%;transition:width 0.5s}
-
-/* 뱃지 */
-.badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-.badge-item{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 4px;text-align:center;opacity:0.35;transition:all 0.3s}
-.badge-item.unlocked{opacity:1;border-color:var(--gold);box-shadow:0 2px 8px rgba(234,179,8,0.25)}
-.badge-icon{font-size:22px;display:block;margin-bottom:2px}
-.badge-name{font-size:10px;font-weight:700;color:var(--ink)}
-
-/* 오답노트 */
-.note-item{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;background:#fff;display:flex;justify-content:space-between;align-items:center}
+.note-item{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;background:#fff;display:flex;flex-direction:column;gap:8px}
 .note-item.starred{border-color:var(--gold);background:#fefce8}
+.note-header{display:flex;justify-content:space-between;align-items:flex-start}
 .note-item strong{font-size:14px;display:block;margin-bottom:2px}
 .note-item p{margin:0;font-size:12px;color:var(--muted)}
-.star-btn{background:none;border:0;font-size:18px;cursor:pointer;padding:0 6px}
+.note-img{width:100%;max-height:220px;object-fit:cover;border-radius:8px;margin-top:6px;border:1px solid var(--line)}
+.img-preview{width:100%;max-height:150px;object-fit:cover;border-radius:8px;margin-top:8px;display:none;border:1px solid var(--line)}
+.star-btn{background:none;border:0;font-size:18px;cursor:pointer;padding:0 4px}
 
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .stat{background:#f8fafc;border-radius:13px;padding:12px}.stat b{display:block;font-size:23px;margin-top:5px}.blue{color:var(--blue)}.green{color:var(--green)}
-select,input,button,textarea{font:inherit}select,input[type=time],input[type=text],input[type=number],input[type=date]{width:100%;padding:11px;border:1px solid #d8deea;border-radius:10px;background:#fff;color:var(--ink);min-height:42px}
+select,input,button,textarea{font:inherit}select,input[type=time],input[type=text],input[type=number],input[type=date],input[type=file]{width:100%;padding:11px;border:1px solid #d8deea;border-radius:10px;background:#fff;color:var(--ink);min-height:42px}
 label{display:block;font-size:13px;font-weight:650;margin:11px 0 5px}
 .days{display:flex;gap:6px;overflow:auto;padding:2px 0 10px}.day{flex:0 0 auto;border:1px solid var(--line);border-radius:10px;background:#fff;padding:9px 12px;color:var(--muted);font-weight:700;cursor:pointer}.day.active{background:#dbeafe;border-color:#93c5fd;color:#1d4ed8}
 .event{display:grid;grid-template-columns:92px 1fr auto;gap:9px;align-items:center;border:1px solid var(--line);border-left:5px solid #94a3b8;border-radius:12px;padding:11px;margin:8px 0;background:#fff}
@@ -108,8 +111,9 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
 <main>
 <nav class="tabs">
 <button class="tab active" data-tab="today">오늘</button>
+<button class="tab" data-tab="calendar">📅 달력</button>
+<button class="tab" data-tab="notes">📝 정리/퀴즈</button>
 <button class="tab" data-tab="timer">⏱️ 타이머</button>
-<button class="tab" data-tab="notes">📝 오답노트</button>
 <button class="tab" data-tab="stats">📊 통계/배지</button>
 <button class="tab" data-tab="week">주간 시간표</button>
 <button class="tab" data-tab="settings">설정</button>
@@ -117,23 +121,34 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
 </nav>
 
 <section id="today" class="panel active">
+ <!-- 🔥 2번: 스트릭 3일 불꽃 연속 목표 카드 -->
  <div class="card streak-card">
   <div class="streak-banner">
    <div class="fire-box">
     <div class="fire-icon">🔥</div>
     <div class="streak-info">
      <h3 id="streakTitle">0일 연속 달성 중!</h3>
-     <p id="streakSub">오늘 일정을 완료하고 스트릭을 유지하세요!</p>
+     <p id="streakSub">목표: 3일 연속 달성 시 특별 배지 해금!</p>
     </div>
    </div>
    <div class="freeze-badge">❄️ 프리즈 <span id="freezeCount">1</span>개</div>
+  </div>
+  <div class="streak-target-bar"><div class="streak-target-fill" id="streakTargetFill"></div></div>
+ </div>
+
+ <!-- 🎮 1번: 15분 미니 퀘스트 카드 -->
+ <div class="card" style="background:#f0fdf4;border-color:#bbf7d0">
+  <h2 style="color:#166534;margin:0">🎯 오늘의 15분 미니 퀘스트</h2>
+  <div class="quest-item">
+   <div><strong style="color:#15803d">⚡ 가볍게 15분 공부 완성하기</strong><p style="margin:2px 0 0;font-size:11px;color:#166534">지금 타이머 15분을 돌리고 성취율을 채워보세요!</p></div>
+   <button class="btn" id="startQuestBtn" style="width:auto;margin:0;padding:6px 12px;background:#16a34a;font-size:12px">도전</button>
   </div>
  </div>
 
  <div class="card">
   <div class="sub" id="todayDate"></div><h2 id="todayTitle">오늘의 남은 일정</h2>
   <div class="daily-progress-wrap">
-   <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700"><span>오늘 달성 성취율</span><span id="dailyPctText">0%</span></div>
+   <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700"><span>오늘 총 성취율 (일정+퀴즈)</span><span id="dailyPctText">0%</span></div>
    <div class="daily-progress-bar"><div class="daily-progress-fill" id="dailyProgressFill"></div></div>
   </div>
   <div class="stats" style="margin-top:12px">
@@ -144,34 +159,90 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
  <div class="card"><h2>실시간 일정 피드</h2><div id="todayEvents"></div></div>
 </section>
 
-<!-- ⏱️ 학습 스톱워치 / 뽀모도로(휴식 연동) / 몰입 모드 / ASMR 백색소음 -->
+<!-- 📅 3번: 수행평가 & 중요 일정 달력 탭 -->
+<section id="calendar" class="panel">
+ <div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+   <h2 id="calMonthYear" style="margin:0">2026년 11월</h2>
+   <div>
+    <button class="btn secondary" id="prevMonthBtn" style="width:auto;padding:5px 10px;margin:0">&lt;</button>
+    <button class="btn secondary" id="nextMonthBtn" style="width:auto;padding:5px 10px;margin:0">&gt;</button>
+   </div>
+  </div>
+  <div class="calendar-grid">
+   <div class="calendar-day-head" style="color:red">일</div><div class="calendar-day-head">월</div><div class="calendar-day-head">화</div><div class="calendar-day-head">수</div><div class="calendar-day-head">목</div><div class="calendar-day-head">금</div><div class="calendar-day-head" style="color:blue">토</div>
+  </div>
+  <div class="calendar-grid" id="calendarDaysGrid"></div>
+ </div>
+ <div class="card">
+  <h2>📌 선택한 날짜 일정 등록/목록</h2>
+  <div class="sub" id="selectedCalDateText">날짜를 선택해 주세요.</div>
+  <label style="margin-top:8px">일정 이름 (수행평가 / 시험 / 과제)</label>
+  <input type="text" id="calEventTitleInput" placeholder="예: 수학 수행평가 제출">
+  <button class="btn" id="addCalEventBtn">➕ 달력 일정 추가</button>
+  <div id="selectedDateEventList" style="margin-top:12px"></div>
+ </div>
+</section>
+
+<!-- 📝 정리노트 & 🧠 퀴즈 검사 탭 -->
+<section id="notes" class="panel">
+ <div class="card">
+  <h2>📝 핵심 정리노트 작성</h2>
+  <p class="sub">개념과 **정답**을 함께 적어두면, 아래에서 퀴즈로 바로 검사할 수 있습니다!</p>
+  <label>과목 / 단원</label>
+  <input type="text" id="noteSubject" placeholder="예: 수학, 영어">
+  <label>질문 또는 핵심 개념</label>
+  <input type="text" id="noteQuestion" placeholder="예: 이차방정식 근의 공식은?">
+  <label>정답 (퀴즈 검사용)</label>
+  <input type="text" id="noteAnswer" placeholder="예: x = (-b ± √(b²-4ac)) / 2a">
+  <label>📷 사진 첨부 (선택)</label>
+  <input type="file" id="noteImageInput" accept="image/*">
+  <img id="noteImgPreview" class="img-preview" alt="미리보기">
+  <button class="btn" id="addNoteBtn">➕ 정리노트 저장</button>
+ </div>
+
+ <!-- 🧠 퀴즈 복습 검사 카드 -->
+ <div class="card quiz-card">
+  <h2>🧠 정리노트 퀴즈 검사 (성취율 UP!)</h2>
+  <p class="sub">내가 쓴 정리노트로 퀴즈를 맞히면 **오늘의 성취율 %**가 올라갑니다!</p>
+  <button class="btn" id="startQuizBtn" style="background:var(--purple)">✨ 랜덤 퀴즈 출제하기</button>
+  <div id="quizDisplayArea" style="display:none" class="quiz-box">
+   <div style="font-size:12px;font-weight:700;color:var(--purple)" id="quizSubBadge">[과목]</div>
+   <h3 style="margin:6px 0 10px" id="quizQuestionText">질문이 여기에 표시됩니다.</h3>
+   <input type="text" id="quizUserAnswer" placeholder="정답을 입력하세요">
+   <button class="btn" id="submitQuizAnswerBtn" style="background:var(--green)">정답 제출하기</button>
+   <div id="quizResultMsg" style="margin-top:8px;font-weight:700"></div>
+  </div>
+ </div>
+
+ <div class="card">
+  <h2>저장된 정리노트 목록</h2>
+  <div id="noteList"></div>
+ </div>
+</section>
+
+<!-- ⏱️ 학습 스톱워치 / 뽀모도로 / 백색소음 -->
 <section id="timer" class="panel">
  <div class="card timer-card">
   <h2 id="timerTitleHeader">⏱️ 실시간 학습 타이머</h2>
-  <div class="focus-mode-bar" id="focusModeBar">🔒 집중 몰입 모드 작동 중 (화면 유지 및 딴짓 감지 중)</div>
+  <div class="focus-mode-bar" id="focusModeBar">🔒 집중 몰입 모드 작동 중</div>
   <p class="sub" style="color:#94a3b8" id="timerSubText">측정할 일정을 선택하고 집중 공부를 시작하세요.</p>
-  
   <div id="timerTaskSelectWrap">
    <label style="color:#cbd5e1;text-align:left">학습/운동 일정 선택</label>
    <select id="timerTaskSelect" style="background:#0f172a;color:#fff;border-color:#334155;margin-bottom:12px"></select>
   </div>
-
   <div class="timer-preset" id="timerPresetGroup">
    <button class="active" id="modeStopwatch">스톱워치</button>
    <button id="modePomo25">뽀모도로 (25분)</button>
    <button id="modePomo50">뽀모도로 (50분)</button>
   </div>
-
   <div class="timer-display" id="timerDisplay">00:00:00</div>
-
   <div class="timer-controls">
    <button class="btn" id="startTimerBtn" style="background:var(--green)">▶ 시작</button>
    <button class="btn" id="pauseTimerBtn" style="background:var(--gold);color:#000;display:none">⏸️ 일시정지</button>
    <button class="btn secondary" id="resetTimerBtn">🔄 리셋</button>
   </div>
   <button class="btn danger" id="finishTimerBtn" style="margin-top:10px;display:none">⏹️ 완료하고 완료 체크 저장하기</button>
-
-  <!-- 🎵 ASMR 백색소음 플레이어 -->
   <div class="asmr-box">
    <div style="font-size:13px;font-weight:700;color:#e2e8f0;text-align:left">🎵 집중 백색소음 (ASMR)</div>
    <div class="asmr-btns">
@@ -180,23 +251,6 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
     <button class="asmr-btn" id="asmrNoise">🎧 핑크노이즈</button>
    </div>
   </div>
- </div>
-</section>
-
-<!-- 📝 오답 노트 (별표 중요 표시 기능 추가) -->
-<section id="notes" class="panel">
- <div class="card">
-  <h2>📝 과목별 오답 노트 & 메모</h2>
-  <p class="sub">복습이 필요한 문제나 핵심 개념을 작성하세요.</p>
-  <label>과목 선택</label>
-  <input type="text" id="noteSubject" placeholder="예: 수학, 영어">
-  <label>내용 / 틀린 이유 메모</label>
-  <textarea id="noteText" rows="3" placeholder="예: 이차방정식 근의 공식 부호 실수 함정 주의!"></textarea>
-  <button class="btn" id="addNoteBtn">➕ 오답 노트 추가</button>
- </div>
- <div class="card">
-  <h2>저장된 메모 목록 (⭐ 중요순 정렬)</h2>
-  <div id="noteList"></div>
  </div>
 </section>
 
@@ -213,7 +267,6 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
  </div>
  <div class="card">
   <h2>📊 과목별 실천 분석 그래프</h2>
-  <p class="sub">이번 주 어떤 과목을 집중적으로 공부했는지 한눈에 보여줍니다.</p>
   <div id="subjectChart" class="chart-bar-wrap"></div>
  </div>
  <div class="card"><h2>주간 총계 현황</h2><div id="statsContent"></div></div>
@@ -240,15 +293,13 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
 <section id="ai" class="panel">
  <div class="card" style="border: 2px solid var(--purple);">
   <h2>🤖 AI 시험 계획 데이터 자동 반영</h2>
-  <p class="sub">대화창에서 AI가 만들어준 JSON 데이터를 붙여넣고 반영 버튼을 누르세요!</p>
-  <label>AI 플랜 데이터 붙여넣기 (JSON 형식)</label>
   <textarea id="aiJsonInput" rows="6" placeholder='여기에 대화창에서 받은 코드를 붙여넣으세요...'></textarea>
   <button class="btn" id="applyAiDataBtn" style="background: var(--purple);">✨ 시간표에 즉시 반영하기</button>
   <div class="ai-output" id="aiApplyStatus" aria-live="polite">대기 중...</div>
  </div>
 </section>
 
-<footer>StudyFit AI · 스마트 타이머 & 효율성 극대화 시스템</footer>
+<footer>StudyFit AI · 퀴즈 & 달력 통합 시스템</footer>
 </main>
 
 <script>
@@ -256,11 +307,16 @@ const DAYS=["월요일","화요일","수요일","목요일","금요일","토요�
 const DEFAULT={
  returns:{"월요일":"22:00","화요일":"17:00","수요일":"22:00","목요일":"20:30","금요일":"19:30","토요일":"09:00","일요일":"09:00"},
  wakes:{"토요일":"09:00","일요일":"09:00"},sleep:"00:30",
- streak:0, freeze:1, lastCompletedDate:"", examDate:"", notes:[], customPlans:null, doneMap:{}
+ streak:0, freeze:1, lastCompletedDate:"", examDate:"", notes:[], customPlans:null, doneMap:{},
+ calEvents:{}, quizDoneCount:0
 };
 let data=load(),plans={},selectedDay=dayFromDate(new Date());
+let currentImageBase64 = "";
+let currentCalDateStr = new Date().toISOString().split('T')[0];
+let currentCalYear = new Date().getFullYear();
+let currentCalMonth = new Date().getMonth();
 
-function load(){try{let saved=JSON.parse(localStorage.getItem("studyfit_mobile")||"{}");return {...DEFAULT,...saved,doneMap:saved.doneMap||{}}}catch(e){return JSON.parse(JSON.stringify(DEFAULT))}}
+function load(){try{let saved=JSON.parse(localStorage.getItem("studyfit_mobile")||"{}");return {...DEFAULT,...saved,doneMap:saved.doneMap||{},calEvents:saved.calEvents||{}}}catch(e){return JSON.parse(JSON.stringify(DEFAULT))}}
 function save(){localStorage.setItem("studyfit_mobile",JSON.stringify(data));}
 function dayFromDate(d){return DAYS[(d.getDay()+6)%7]}
 function mins(t){let [h,m]=t.split(":").map(Number);return h*60+m}
@@ -336,26 +392,131 @@ function updateStreakUI(){
  const s = data.streak || 0;
  document.getElementById("headerStreakVal").textContent = s + "일";
  document.getElementById("streakTitle").textContent = s + "일 연속 달성 중!";
- document.getElementById("streakSub").textContent = s > 0 ? "불꽃이 불타오르고 있어요! 🔥" : "오늘 공부나 운동을 완료하고 스트릭을 만드세요!";
+ document.getElementById("streakSub").textContent = s >= 3 ? "🎉 3일 불꽃 목표 달성 완료!" : `3일 불꽃 달성까지 ${3 - s}일 남았습니다! 🔥`;
  document.getElementById("freezeCount").textContent = data.freeze || 0;
+ 
+ // 🔥 2번: 3일 목표 프로그레스 바
+ let pct = Math.min(100, Math.round((s / 3) * 100));
+ document.getElementById("streakTargetFill").style.width = pct + "%";
 
  if(s >= 1) document.getElementById("badge1").classList.add("unlocked");
  if(s >= 3) document.getElementById("badge2").classList.add("unlocked");
  if(s >= 7) document.getElementById("badge3").classList.add("unlocked");
 }
 
-// ⏱️ 타이머 & 뽀모도로(휴식 연동) 엔진
+// 📅 3번: 달력 구현 코드
+function renderCalendar(){
+ document.getElementById("calMonthYear").textContent = `${currentCalYear}년 ${currentCalMonth + 1}월`;
+ const grid = document.getElementById("calendarDaysGrid"); grid.innerHTML = "";
+ const firstDay = new Date(currentCalYear, currentCalMonth, 1).getDay();
+ const lastDate = new Date(currentCalYear, currentCalMonth + 1, 0).getDate();
+ const todayStr = new Date().toISOString().split('T')[0];
+
+ for(let i=0; i<firstDay; i++){
+  let empty = document.createElement("div"); grid.appendChild(empty);
+ }
+
+ for(let d=1; d<=lastDate; d++){
+  let cell = document.createElement("div");
+  let mStr = String(currentCalMonth + 1).padStart(2,'0');
+  let dStr = String(d).padStart(2,'0');
+  let dateKey = `${currentCalYear}-${mStr}-${dStr}`;
+
+  cell.className = "calendar-cell" + (dateKey === todayStr ? " today" : "");
+  cell.innerHTML = `<div class="day-num">${d}</div>`;
+
+  let events = (data.calEvents || {})[dateKey] || [];
+  events.forEach(ev => {
+   let dot = document.createElement("div"); dot.className = "calendar-event-dot";
+   dot.textContent = ev; cell.appendChild(dot);
+  });
+
+  cell.onclick = function(){
+   currentCalDateStr = dateKey;
+   renderSelectedDateEvents();
+  };
+  grid.appendChild(cell);
+ }
+ renderSelectedDateEvents();
+}
+
+function renderSelectedDateEvents(){
+ document.getElementById("selectedCalDateText").textContent = `📌 ${currentCalDateStr} 일정`;
+ const box = document.getElementById("selectedDateEventList"); box.innerHTML = "";
+ const list = (data.calEvents || {})[currentCalDateStr] || [];
+ if(!list.length){ box.innerHTML = "<p class='sub'>등록된 중요 일정이 없습니다.</p>"; return; }
+ list.forEach((evText, idx) => {
+  let item = document.createElement("div");
+  item.style.cssText = "display:flex;justify-space-between;align-items:center;padding:6px;border-bottom:1px solid #eee;font-size:13px";
+  item.innerHTML = `<span>• ${evText}</span>`;
+  let delBtn = document.createElement("button"); delBtn.textContent = "삭제";
+  delBtn.className = "btn danger"; delBtn.style.cssText = "width:auto;padding:3px 6px;margin:0;font-size:10px";
+  delBtn.onclick = function(){
+   data.calEvents[currentCalDateStr].splice(idx, 1); save(); renderCalendar();
+  };
+  item.appendChild(delBtn); box.appendChild(item);
+ });
+}
+
+document.getElementById("prevMonthBtn").onclick = function(){ currentCalMonth--; if(currentCalMonth<0){currentCalMonth=11; currentCalYear--;} renderCalendar(); };
+document.getElementById("nextMonthBtn").onclick = function(){ currentCalMonth++; if(currentCalMonth>11){currentCalMonth=0; currentCalYear++;} renderCalendar(); };
+
+document.getElementById("addCalEventBtn").onclick = function(){
+ const txt = document.getElementById("calEventTitleInput").value.trim();
+ if(!txt) return alert("일정 이름을 입력하세요!");
+ data.calEvents = data.calEvents || {};
+ data.calEvents[currentCalDateStr] = data.calEvents[currentCalDateStr] || [];
+ data.calEvents[currentCalDateStr].push(txt);
+ save(); renderCalendar();
+ document.getElementById("calEventTitleInput").value = "";
+};
+
+// 🧠 정리노트 퀴즈 시스템
+let activeQuizItem = null;
+document.getElementById("startQuizBtn").onclick = function(){
+ const list = (data.notes || []).filter(n => n.ans);
+ if(!list.length) return alert("정답(답)이 포함된 정리노트를 작성해 주세요!");
+ activeQuizItem = list[Math.floor(Math.random() * list.length)];
+ document.getElementById("quizSubBadge").textContent = `[${activeQuizItem.sub}]`;
+ document.getElementById("quizQuestionText").textContent = activeQuizItem.q || activeQuizItem.txt;
+ document.getElementById("quizUserAnswer").value = "";
+ document.getElementById("quizResultMsg").textContent = "";
+ document.getElementById("quizDisplayArea").style.display = "block";
+};
+
+document.getElementById("submitQuizAnswerBtn").onclick = function(){
+ if(!activeQuizItem) return;
+ const userAns = document.getElementById("quizUserAnswer").value.trim();
+ const resultMsg = document.getElementById("quizResultMsg");
+ if(userAns.toLowerCase() === activeQuizItem.ans.toLowerCase()){
+  resultMsg.textContent = "🎉 정답입니다! 오늘의 성취율이 10% 증가했습니다!";
+  resultMsg.style.color = "var(--green)";
+  data.quizDoneCount = (data.quizDoneCount || 0) + 1;
+  save(); renderToday();
+ } else {
+  resultMsg.textContent = `❌ 아쉽네요. 정답은 [${activeQuizItem.ans}] 입니다.`;
+  resultMsg.style.color = "var(--red)";
+ }
+};
+
+// 🎮 1번: 15분 미니 퀘스트
+document.getElementById("startQuestBtn").onclick = function(){
+ document.querySelectorAll(".tab,.panel").forEach(x=>x.classList.remove("active"));
+ document.querySelector("[data-tab='timer']").classList.add("active");
+ document.getElementById("timer").classList.add("active");
+ setTimerMode("pomo", 15 * 60, null);
+};
+
+// ⏱️ 타이머 엔진
 let timerInterval = null, timerSeconds = 0, timerMode = "stopwatch", timerTargetSeconds = 0;
-let isBreakTime = false; // 휴식 시간 여부
-let wakeLock = null;
-let audioCtx = null, noiseNode = null;
+let isBreakTime = false; let wakeLock = null; let audioCtx = null, noiseNode = null;
 
 async function requestWakeLock() { try { if ('wakeLock' in navigator) { wakeLock = await navigator.wakeLock.request('screen'); } } catch (err) {} }
 function releaseWakeLock() { if (wakeLock) { wakeLock.release(); wakeLock = null; } }
 
 document.addEventListener('visibilitychange', () => {
  if (!document.hidden && timerInterval) {
-  alert("⚠️ 집중 모드 중 이탈 감지!\n인스타그램이나 유튜브 등 딴짓 앱으로 이동하지 말고 공부에 계속 몰입하세요!");
+  alert("⚠️ 집중 모드 중 이탈 감지!\n공부에 계속 몰입하세요!");
  }
 });
 
@@ -398,27 +559,21 @@ document.getElementById("startTimerBtn").onclick = function(){
   timerSeconds++; updateTimerDisplay();
   if(timerMode === "pomo" && !isBreakTime && timerSeconds >= timerTargetSeconds){
    clearInterval(timerInterval); timerInterval = null;
-   
-   // 🍅 뽀모도로 종료 후 자동으로 휴식 시간 시작 (25분->5분휴식, 50분->10분휴식)
    let breakSec = timerTargetSeconds === 25 * 60 ? 5 * 60 : 10 * 60;
-   isBreakTime = true;
-   timerSeconds = 0;
-   timerTargetSeconds = breakSec;
+   isBreakTime = true; timerSeconds = 0; timerTargetSeconds = breakSec;
    
    document.getElementById("timerTitleHeader").textContent = "🍅 휴식 시간 (Relax)";
    document.getElementById("timerSubText").textContent = "머리를 식히고 가볍게 휴식하세요!";
    document.getElementById("timerTaskSelectWrap").style.display = "none";
    document.getElementById("timerPresetGroup").style.display = "none";
    document.getElementById("finishTimerBtn").style.display = "none";
-   
    alert("🎉 뽀모도로 집중 완료! 이어서 자동 휴식 타이머가 시작됩니다 🍅");
    
-   // 휴식 타이머 재시작
    timerInterval = setInterval(()=>{
     timerSeconds++; updateTimerDisplay();
     if(timerSeconds >= timerTargetSeconds){
      clearInterval(timerInterval); timerInterval = null;
-     alert("🔔 휴식 시간이 종료되었습니다! 다음 공부를 준비하세요.");
+     alert("🔔 휴식 시간이 종료되었습니다!");
      resetTimer();
     }
    }, 1000);
@@ -482,49 +637,64 @@ document.getElementById("asmrRain").onclick = function(){ playNoise('rain'); set
 document.getElementById("asmrNoise").onclick = function(){ playNoise('noise'); setAsmrActive(this); };
 function setAsmrActive(btn){ document.querySelectorAll(".asmr-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
 
-// 📝 오답노트 (⭐ 별표 중요순 정렬)
+// 📝 정리노트 저장
+document.getElementById("noteImageInput").addEventListener("change", function(e){
+ const file = e.target.files[0];
+ if(file){
+  const reader = new FileReader();
+  reader.onload = function(evt){
+   currentImageBase64 = evt.target.result;
+   const preview = document.getElementById("noteImgPreview");
+   preview.src = currentImageBase64; preview.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+ }
+});
+
 document.getElementById("addNoteBtn").onclick = function(){
  const sub = document.getElementById("noteSubject").value.trim();
- const txt = document.getElementById("noteText").value.trim();
- if(!sub || !txt) return alert("과목과 내용을 모두 입력해주세요!");
+ const q = document.getElementById("noteQuestion").value.trim();
+ const ans = document.getElementById("noteAnswer").value.trim();
+ if(!sub || !q) return alert("과목과 질문/개념을 입력해 주세요!");
  data.notes = data.notes || [];
- data.notes.unshift({ id: Date.now(), sub, txt, starred: false, date: new Date().toLocaleDateString() });
+ data.notes.unshift({ id: Date.now(), sub, q, txt: q, ans, img: currentImageBase64, starred: false, date: new Date().toLocaleDateString() });
  save(); renderNotes();
- document.getElementById("noteSubject").value = ""; document.getElementById("noteText").value = "";
+ 
+ document.getElementById("noteSubject").value = "";
+ document.getElementById("noteQuestion").value = "";
+ document.getElementById("noteAnswer").value = "";
+ document.getElementById("noteImageInput").value = "";
+ document.getElementById("noteImgPreview").style.display = "none";
+ currentImageBase64 = "";
 };
 
 function renderNotes(){
  const box = document.getElementById("noteList"); box.innerHTML = "";
  let list = data.notes || [];
- if(!list.length){ box.innerHTML = "<p class='sub'>등록된 오답 메모가 없습니다.</p>"; return; }
- 
- // 별표(starred)가 켜진 항목이 위로 오도록 정렬
+ if(!list.length){ box.innerHTML = "<p class='sub'>등록된 정리노트가 없습니다.</p>"; return; }
  list.sort((a,b)=>(b.starred===true)-(a.starred===true));
 
  list.forEach(n => {
   let div = document.createElement("div"); div.className = "note-item" + (n.starred ? " starred" : "");
-  
+  let header = document.createElement("div"); header.className = "note-header";
   let left = document.createElement("div");
-  left.innerHTML = `<strong>[${n.sub}] ${n.txt}</strong><p>${n.date}</p>`;
+  left.innerHTML = `<strong>[${n.sub}] ${n.q || n.txt}</strong><p style="color:var(--purple);font-weight:700">답: ${n.ans || '없음'}</p><p>${n.date}</p>`;
   
   let right = document.createElement("div");
   right.style.display = "flex"; right.style.alignItems = "center"; right.style.gap = "4px";
 
-  let starBtn = document.createElement("button");
-  starBtn.className = "star-btn";
+  let starBtn = document.createElement("button"); starBtn.className = "star-btn";
   starBtn.textContent = n.starred ? "⭐" : "☆";
-  starBtn.title = "중요 표시";
-  starBtn.onclick = function(){
-   n.starred = !n.starred;
-   save(); renderNotes();
-  };
+  starBtn.onclick = function(){ n.starred = !n.starred; save(); renderNotes(); };
 
   let delBtn = document.createElement("button"); delBtn.textContent = "삭제";
   delBtn.className = "btn danger"; delBtn.style.cssText = "width:auto;padding:5px 8px;margin:0;font-size:11px";
   delBtn.onclick = function(){ data.notes = data.notes.filter(x=>x.id!==n.id); save(); renderNotes(); };
 
-  right.append(starBtn, delBtn);
-  div.append(left, right);
+  right.append(starBtn, delBtn); header.append(left, right); div.appendChild(header);
+  if(n.img) {
+   let img = document.createElement("img"); img.src = n.img; img.className = "note-img"; div.appendChild(img);
+  }
   box.appendChild(div);
  });
 }
@@ -552,17 +722,13 @@ function renderSubjectChart(){
 }
 
 function renderEvents(container, day, isToday=false){
- let list = plans[day] || [];
- container.innerHTML = "";
- 
+ let list = plans[day] || []; container.innerHTML = "";
  if(isToday) {
   const now = new Date();
   const currentMins = now.getHours() * 60 + now.getMinutes();
   list = list.filter(e => e.e > currentMins);
  }
-
  if(!list.length){ container.innerHTML='<p class="sub">오늘 남은 일정이 없습니다! 수고하셨습니다 👏</p>'; return; }
- 
  list.forEach(e=>{
   let div=document.createElement("div");div.className="event "+e.cat+(e.done?" done":"");
   let time=document.createElement("time");time.textContent=fmt(e.s)+"–"+fmt(e.e);
@@ -601,8 +767,9 @@ function renderToday(){
  document.getElementById("todayStudy").textContent=s+"분";
  document.getElementById("todayWorkout").textContent=w+"분";
 
- // 🎯 일일 성취율 퍼센트 바 계산
- let dayPct = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
+ // 퀴즈 맞힌 횟수에 따라 성취율 추가 반영
+ let quizBonus = (data.quizDoneCount || 0) * 10;
+ let dayPct = totalCount > 0 ? Math.min(100, Math.round((doneCount / totalCount) * 100) + quizBonus) : Math.min(100, quizBonus);
  document.getElementById("dailyPctText").textContent = dayPct + "%";
  document.getElementById("dailyProgressFill").style.width = dayPct + "%";
 }
@@ -616,7 +783,7 @@ function renderStats(){
  renderSubjectChart();
 }
 
-function renderAll(){renderToday();renderWeek();renderStats();renderNotes();updateStreakUI();updateDdayUI();}
+function renderAll(){renderToday();renderWeek();renderStats();renderNotes();renderCalendar();updateStreakUI();updateDdayUI();}
 
 function renderSettings(){
  let box=document.getElementById("timeSettings");box.innerHTML="";
@@ -646,7 +813,7 @@ document.getElementById("saveSettings").onclick=()=>{
  save();generate();alert("설정을 저장했어.");
 };
 
-document.getElementById("resetChecks").onclick=()=>{if(confirm("모든 완료 체크를 초기화할까?")){data.doneMap={};save();renderAll()}};
+document.getElementById("resetChecks").onclick=()=>{if(confirm("모든 완료 체크를 초기화할까?")){data.doneMap={};data.quizDoneCount=0;save();renderAll()}};
 
 document.getElementById("applyAiDataBtn").addEventListener("click", () => {
  const rawText = document.getElementById("aiJsonInput").value.trim();
